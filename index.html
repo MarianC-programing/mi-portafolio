@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marian Barba — Desarrolladora Full-Stack</title>
+<meta name="description" content="Portafolio de Marian Barba, desarrolladora Full-Stack en Panamá. Sistemas web reales para clientes, negocios y proyectos académicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F5F1;
+    --bg-alt: #EDEBE4;
+    --ink: #1B2430;
+    --ink-soft: #55606B;
+    --line: #DBD7CC;
+    --accent: #0B5D63;
+    --accent-soft: rgba(11,93,99,0.08);
+    --accent-ink: #FFFFFF;
+    --live: #2F7A4D;
+    --live-bg: rgba(47,122,77,0.10);
+    --delivered: #55606B;
+    --delivered-bg: rgba(85,96,107,0.10);
+    --dev: #B5762F;
+    --dev-bg: rgba(181,118,47,0.12);
+    --radius: 3px;
+    --maxw: 1120px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    line-height:1.1;
+    margin:0;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+  }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 32px;
+  }
+  section{ position:relative; }
+
+  /* Focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(246,245,241,0.92);
+    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:18px 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.15rem;
+    letter-spacing:-0.01em;
+    text-decoration:none;
+  }
+  .brand span{ color:var(--accent); }
+  nav.links{ display:flex; gap:28px; align-items:center; }
+  nav.links a{
+    text-decoration:none;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    transition:color .15s ease;
+  }
+  nav.links a:hover{ color:var(--ink); }
+  .nav-cta{
+    border:1px solid var(--ink);
+    padding:8px 16px;
+    border-radius:var(--radius);
+    font-size:0.85rem !important;
+    color:var(--ink) !important;
+  }
+  .nav-cta:hover{ background:var(--ink); color:var(--bg) !important; }
+  .menu-toggle{ display:none; background:none; border:none; cursor:pointer; padding:4px; }
+  .menu-toggle svg{ width:22px; height:22px; }
+
+  @media (max-width:820px){
+    nav.links{
+      position:fixed; top:64px; left:0; right:0;
+      background:var(--bg);
+      flex-direction:column;
+      align-items:flex-start;
+      padding:20px 32px 28px;
+      border-bottom:1px solid var(--line);
+      gap:16px;
+      transform:translateY(-8px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
+    }
+    nav.links.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
+    .menu-toggle{ display:block; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:88px 0 0;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:8px; height:8px;
+    background:var(--live);
+    border-radius:50%;
+    display:inline-block;
+    box-shadow:0 0 0 3px var(--live-bg);
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 5.4vw, 4.1rem);
+    max-width:14ch;
+    letter-spacing:-0.01em;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--accent);
+  }
+  .hero p.lede{
+    max-width:56ch;
+    font-size:1.15rem;
+    color:var(--ink-soft);
+    margin:26px 0 34px;
+  }
+  .hero-actions{
+    display:flex; gap:16px; flex-wrap:wrap;
+    margin-bottom:56px;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 22px;
+    border-radius:var(--radius);
+    text-decoration:none;
+    font-size:0.95rem;
+    font-weight:500;
+    transition:all .15s ease;
+    border:1px solid transparent;
+  }
+  .btn-primary{ background:var(--ink); color:var(--bg); }
+  .btn-primary:hover{ background:var(--accent); }
+  .btn-ghost{ border-color:var(--line); color:var(--ink); }
+  .btn-ghost:hover{ border-color:var(--ink); }
+
+  /* Manifest strip — signature element */
+  .manifest{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--bg-alt);
+  }
+  .manifest-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:22px 32px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:18px;
+  }
+  .manifest-item{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+  }
+  .manifest-item .k{
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    font-size:0.7rem;
+    display:block;
+    margin-bottom:6px;
+  }
+  .manifest-item .v{ color:var(--ink); font-size:0.92rem; }
+  @media (max-width:820px){
+    .manifest-inner{ grid-template-columns:repeat(2, 1fr); }
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section-head{
+    padding:96px 0 40px;
+    max-width:640px;
+  }
+  .about .section-head{ padding-bottom:0; }
+  .section-head .eyebrow::before{ display:none; }
+  .section-head .eyebrow{ padding-left:0; }
+  .section-head h2{
+    font-size:clamp(1.8rem, 3.4vw, 2.5rem);
+    margin-top:10px;
+  }
+  .section-head p{ color:var(--ink-soft); margin-top:16px; font-size:1.02rem; }
+
+  /* ---------- ABOUT / SKILLS ---------- */
+  .about{ padding-bottom:40px; }
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:64px;
+    align-items:start;
+  }
+  .about .about-grid{ margin-top:12px; }
+  .about-copy p{ margin:0 0 18px; color:var(--ink-soft); font-size:1.02rem; }
+  .about-copy p strong{ color:var(--ink); font-weight:600; }
+
+  .skill-block + .skill-block{ margin-top:26px; }
+  .skill-block h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    font-weight:500;
+    margin-bottom:12px;
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    padding:6px 11px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--bg);
+    color:var(--ink);
+  }
+  @media (max-width:820px){
+    .about-grid{ grid-template-columns:1fr; gap:40px; }
+  }
+
+  /* ---------- TECH MARQUEE ---------- */
+  .tech-section{
+    position:relative;
+    padding:64px 0 72px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--bg-alt);
+    overflow:hidden;
+  }
+  .tech-section::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:radial-gradient(circle at center, rgba(27,36,48,0.07) 1px, transparent 1px);
+    background-size:26px 26px;
+    pointer-events:none;
+  }
+  .tech-section .wrap{ position:relative; }
+  .tech-section .eyebrow{ justify-content:center; }
+  .tech-section .eyebrow::before{ display:none; }
+  .tech-heading{
+    text-align:center;
+    max-width:640px;
+    margin:0 auto;
+  }
+  .tech-heading h2{ font-size:clamp(1.5rem, 2.6vw, 2rem); margin-top:10px; }
+  .tech-heading p{ color:var(--ink-soft); margin-top:14px; font-size:1rem; }
+  .tech-rows{
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+    margin-top:44px;
+  }
+  .tech-marquee{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right, transparent 0, black 72px, black calc(100% - 72px), transparent 100%);
+    mask-image:linear-gradient(to right, transparent 0, black 72px, black calc(100% - 72px), transparent 100%);
+  }
+  .tech-track{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    width:max-content;
+  }
+  .tech-track.to-left{ animation:tech-scroll-left 36s linear infinite; }
+  .tech-track.to-right{ animation:tech-scroll-right 32s linear infinite; }
+  .tech-rows:hover .tech-track{ animation-play-state:paused; }
+  .tech-badge{
+    height:64px;
+    width:64px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:#FFFFFF;
+    border:1px solid var(--line);
+    box-shadow:0 4px 14px rgba(27,36,48,0.10);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .tech-badge:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 22px rgba(11,93,99,0.20);
+  }
+  .tech-badge img{
+    height:34px;
+    width:34px;
+    object-fit:contain;
+  }
+  @keyframes tech-scroll-left{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  @keyframes tech-scroll-right{
+    from{ transform:translateX(-50%); }
+    to{ transform:translateX(0); }
+  }
+  @media (max-width:820px){
+    .tech-track{ gap:18px; }
+    .tech-badge{ height:52px; width:52px; }
+    .tech-badge img{ height:28px; width:28px; }
+    .tech-marquee{
+      -webkit-mask-image:linear-gradient(to right, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
+      mask-image:linear-gradient(to right, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
+    }
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .projects{ padding-bottom:20px; }
+  .case{
+    border-top:1px solid var(--line);
+    padding:44px 0;
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:48px;
+  }
+  .case:last-child{ border-bottom:1px solid var(--line); }
+  .case:nth-child(even){
+    background:var(--bg-alt);
+    margin:0 -32px; padding-left:32px; padding-right:32px;
+    width:calc(100% + 64px);
+  }
+  .case-meta{ padding-top:4px; }
+  .status{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:5px 10px;
+    border-radius:var(--radius);
+    margin-bottom:18px;
+  }
+  .status::before{ content:""; width:6px; height:6px; border-radius:50%; }
+  .status.live{ background:var(--live-bg); color:var(--live); }
+  .status.live::before{ background:var(--live); }
+  .status.delivered{ background:var(--delivered-bg); color:var(--delivered); }
+  .status.delivered::before{ background:var(--delivered); }
+  .status.dev{ background:var(--dev-bg); color:var(--dev); }
+  .status.dev::before{ background:var(--dev); }
+
+  .case-meta dl{ margin:0; }
+  .case-meta dt{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    margin-top:16px;
+  }
+  .case-meta dd{ margin:4px 0 0; font-size:0.9rem; }
+
+  .case-body h3{
+    font-size:1.55rem;
+    margin-bottom:6px;
+  }
+  .case-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--accent);
+    margin-bottom:14px;
+    display:block;
+  }
+  .case-body p{ color:var(--ink-soft); margin:0 0 14px; max-width:64ch; }
+  .stack-row{ display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 22px; }
+  .case-links{ display:flex; gap:18px; flex-wrap:wrap; }
+  .case-links a{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:0.9rem; font-weight:500;
+    text-decoration:none;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:2px;
+    transition:opacity .15s ease;
+  }
+  .case-links a:hover{ opacity:0.6; }
+  .case-links svg{ width:14px; height:14px; }
+
+  @media (max-width:820px){
+    .case{ grid-template-columns:1fr; gap:20px; }
+    .case:nth-child(even){ margin:0; width:100%; padding-left:0; padding-right:0; }
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact{ padding:96px 0 80px; }
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+  }
+  .contact-info h2{ font-size:clamp(1.9rem, 3.6vw, 2.6rem); max-width:12ch; }
+  .contact-info p{ color:var(--ink-soft); margin:20px 0 28px; max-width:44ch; }
+  .contact-channels{ display:flex; flex-direction:column; gap:14px; }
+  .contact-channels a{
+    display:flex; align-items:center; gap:10px;
+    text-decoration:none;
+    font-size:0.98rem;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+    transition:color .15s ease;
+  }
+  .contact-channels a:hover{ color:var(--accent); }
+  .contact-channels svg{ width:18px; height:18px; flex-shrink:0; }
+
+  form.contact-form{ display:flex; flex-direction:column; gap:16px; }
+  .field label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .field input, .field textarea{
+    width:100%;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:12px 14px;
+    font-family:'Inter', sans-serif;
+    font-size:0.96rem;
+    color:var(--ink);
+  }
+  .field textarea{ resize:vertical; min-height:110px; }
+  .field input:focus, .field textarea:focus{
+    outline:none; border-color:var(--accent);
+  }
+  .submit-btn{
+    align-self:flex-start;
+    border:none;
+    cursor:pointer;
+    margin-top:6px;
+  }
+  .form-note{ font-size:0.82rem; color:var(--ink-soft); margin-top:4px; }
+  .form-status{ display:block; font-size:0.88rem; margin-top:4px; min-height:1.2em; }
+  .form-status.ok{ color:var(--live); }
+  .form-status.err{ color:var(--dev); }
+
+  @media (max-width:820px){
+    .contact-grid{ grid-template-columns:1fr; gap:48px; }
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:28px 0;
+  }
+  .footer-inner{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+  .footer-inner a{ text-decoration:none; }
+  .footer-inner a:hover{ color:var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">Marian <span>Barba</span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="links" id="navLinks">
+      <a href="#proyectos">Proyectos</a>
+      <a href="#tecnologias">Tecnologías</a>
+      <a href="#contacto" class="nav-cta">Contactar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Disponible para proyectos full-stack</div>
+      <h1>Construyo sistemas web que <em>resuelven</em> problemas reales de negocio.</h1>
+      <p class="lede">
+        Soy Marian Barba, desarrolladora full-stack en Panamá. Diseño, construyo y despliego
+        aplicaciones completas — desde el formulario que ve el cliente hasta la base de datos
+        que lo sostiene — para pequeños negocios, proyectos inmobiliarios y equipos académicos.
+      </p>
+      <div class="hero-actions">
+        <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
+        <a href="#contacto" class="btn btn-ghost">Hablemos de tu proyecto</a>
+      </div>
+    </div>
+
+    <div class="manifest">
+      <div class="manifest-inner">
+        <div class="manifest-item">
+          <span class="k">Origen</span>
+          <span class="v">Panamá</span>
+        </div>
+        <div class="manifest-item">
+          <span class="k">Productos entregados</span>
+          <span class="v">5 sistemas completos</span>
+        </div>
+        <div class="manifest-item">
+          <span class="k">Stack principal</span>
+          <span class="v">React · Node · Java</span>
+        </div>
+        <div class="manifest-item">
+          <span class="k">Enfoque</span>
+          <span class="v">Full-Stack + QA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about wrap">
+    <div class="section-head">
+      <div class="eyebrow mono">Sobre mí</div>
+      <h2>De la idea del cliente al sistema en producción.</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-copy">
+        <p>
+          Trabajo el ciclo completo de una aplicación web: levanto el requerimiento con el
+          cliente, diseño la base de datos y la arquitectura, construyo el frontend y el backend,
+          y me encargo del despliegue. Lo he hecho tanto en <strong>proyectos freelance con
+          clientes reales</strong> — una pastelería, un proyecto de venta de lotes — como en
+          <strong>proyectos académicos con procesos formales de calidad</strong> (Scrum, ISTQB,
+          CI/CD) en la Universidad Tecnológica de Panamá.
+        </p>
+        <p>
+          Mi punto fuerte es el desarrollo full-stack, pero también me muevo cómoda en QA,
+          DevOps y, cuando el proyecto lo pide, análisis de datos con Python. Prefiero entender
+          el problema del negocio antes que elegir la tecnología de moda.
+        </p>
+      </div>
+      <div id="stack">
+        <div class="skill-block">
+          <h3>Frontend</h3>
+          <div class="chip-row">
+            <span class="chip">React</span><span class="chip">TypeScript</span>
+            <span class="chip">Tailwind CSS</span><span class="chip">shadcn/ui</span>
+            <span class="chip">HTML / CSS / JS</span><span class="chip">Vite</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <h3>Backend</h3>
+          <div class="chip-row">
+            <span class="chip">Node.js</span><span class="chip">Express</span>
+            <span class="chip">Java (Servlets/JSP)</span><span class="chip">APIs REST</span>
+            <span class="chip">bcrypt / autenticación</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <h3>Datos</h3>
+          <div class="chip-row">
+            <span class="chip">PostgreSQL</span><span class="chip">MySQL</span>
+            <span class="chip">SQLite</span><span class="chip">Drizzle ORM</span>
+            <span class="chip">JDBC</span><span class="chip">Python</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <h3>Calidad &amp; procesos</h3>
+          <div class="chip-row">
+            <span class="chip">Scrum</span><span class="chip">ISTQB</span>
+            <span class="chip">SonarQube</span><span class="chip">Vitest</span>
+            <span class="chip">CI/CD</span><span class="chip">Railway · Netlify · Vercel </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tech-section" id="tecnologias">
+    <div class="wrap">
+      <div class="tech-heading">
+        <div class="eyebrow mono">Tecnologías</div>
+        <h2>Con lo que construyo todos los días</h2>
+        <p>Del frontend a la base de datos, pasando por el despliegue.</p>
+      </div>
+
+      <div class="tech-rows">
+        <!-- Fila 1 — hacia la izquierda -->
+        <div class="tech-marquee">
+          <div class="tech-track to-left">
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" title="React" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript" title="TypeScript" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript" title="JavaScript" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="Node.js" title="Node.js" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/express/000000" alt="Express" title="Express" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" title="Java" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="Tailwind CSS" title="Tailwind CSS" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/vite/646CFF" alt="Vite" title="Vite" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="PostgreSQL" title="PostgreSQL" loading="lazy"></div>
+            <!-- repetido para el loop -->
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" title="React" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript" title="TypeScript" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript" title="JavaScript" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/nodedotjs/339933" alt="Node.js" title="Node.js" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/express/000000" alt="Express" title="Express" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" title="Java" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="Tailwind CSS" title="Tailwind CSS" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/vite/646CFF" alt="Vite" title="Vite" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="PostgreSQL" title="PostgreSQL" loading="lazy"></div>
+          </div>
+        </div>
+
+        <!-- Fila 2 — hacia la derecha -->
+        <div class="tech-marquee">
+          <div class="tech-track to-right">
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL" title="MySQL" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/sqlite/003B57" alt="SQLite" title="SQLite" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/supabase/3FCF8E" alt="Supabase" title="Supabase" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/netlify/00C7B7" alt="Netlify" title="Netlify" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/railway/0B0D0E" alt="Railway" title="Railway" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/git/F05032" alt="Git" title="Git" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/github/181717" alt="GitHub" title="GitHub" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" title="HTML5" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/css3/1572B6" alt="CSS3" title="CSS3" loading="lazy"></div>
+            <!-- repetido para el loop -->
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL" title="MySQL" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/sqlite/003B57" alt="SQLite" title="SQLite" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/supabase/3FCF8E" alt="Supabase" title="Supabase" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/netlify/00C7B7" alt="Netlify" title="Netlify" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/railway/0B0D0E" alt="Railway" title="Railway" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/git/F05032" alt="Git" title="Git" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/github/181717" alt="GitHub" title="GitHub" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" title="HTML5" loading="lazy"></div>
+            <div class="tech-badge"><img src="https://cdn.simpleicons.org/css3/1572B6" alt="CSS3" title="CSS3" loading="lazy"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="projects wrap" id="proyectos">
+    <div class="section-head">
+      <div class="eyebrow mono">Proyectos</div>
+      <h2>Cinco sistemas, cinco problemas distintos.</h2>
+      <p>Cada uno con su propio stack, su propio cliente y su propio estado real de entrega.</p>
+    </div>
+
+    <!-- HELIOS -->
+    <article class="case">
+      <div class="case-meta">
+        <span class="status live">En producción</span>
+        <dl>
+          <dt>Rol</dt>
+          <dd>Scrum Master / DevOps — equipo de 5</dd>
+          <dt>Contexto</dt>
+          <dd>Proyecto académico, UTP — Calidad de Software</dd>
+          <dt>Año</dt>
+          <dd>2026</dd>
+        </dl>
+      </div>
+      <div class="case-body">
+        <h3>Helios</h3>
+        <span class="case-tag">Sistema de citas médicas para red de policlínicas</span>
+        <p>
+          Plataforma que unifica el agendamiento, cancelación, sincronización entre sedes y
+          notificaciones de citas para una red de policlínicas panameñas. Se construyó en
+          Scrum, con pruebas ISTQB documentadas por módulo y despliegue continuo, para que la
+          calidad no dependiera de "probarlo antes de entregar" sino de métricas medibles desde
+          el primer sprint.
+        </p>
+        <p>
+          Como Scrum Master y responsable de DevOps, llevé los dailys, coordiné los sprints con
+          el equipo y dejé el pipeline de CI/CD corriendo en Railway.
+        </p>
+        <div class="stack-row">
+          <span class="chip">React</span><span class="chip">TypeScript</span>
+          <span class="chip">Supabase</span><span class="chip">PostgreSQL</span>
+          <span class="chip">Vitest</span><span class="chip">Railway</span>
+        </div>
+        <div class="case-links">
+          <a href="https://github.com/Helios-TeamUTP/Helios" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>
+            Código
+          </a>
+          <a href="https://helios-web-production.up.railway.app/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+            Demo en vivo
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- LA CASA DE MANDI -->
+    <article class="case">
+      <div class="case-meta">
+        <span class="status delivered">Entregado</span>
+        <dl>
+          <dt>Rol</dt>
+          <dd>Desarrolladora full-stack única</dd>
+          <dt>Contexto</dt>
+          <dd>Cliente real — pastelería artesanal</dd>
+          <dt>Despliegue</dt>
+          <dd>Servidor local (Tomcat)</dd>
+        </dl>
+      </div>
+      <div class="case-body">
+        <h3>La Casa de Mandi</h3>
+        <span class="case-tag">Plataforma de pedidos personalizados para una pastelería</span>
+        <p>
+          La pastelería llevaba sus pedidos por WhatsApp, Excel y capturas de pantalla de Yappy.
+          Diseñé y construí un sistema con login que digitaliza todo el ciclo: catálogo, pedido
+          con diseño a medida, abono verificado por la administradora, producción, pago final y
+          entrega — con un panel de administración para controlar cuánto puede producir la
+          pastelería por día.
+        </p>
+        <p>
+          Hice esto de principio a fin: la propuesta al cliente, el diseño de base de datos, todo
+          el backend en Java y las pantallas.
+        </p>
+        <div class="stack-row">
+          <span class="chip">Java</span><span class="chip">Servlets / JSP</span>
+          <span class="chip">Apache Tomcat</span><span class="chip">MySQL</span>
+          <span class="chip">JDBC</span>
+        </div>
+        <div class="case-links">
+          <a href="https://github.com/MarianC-programing/lacasademandi" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>
+            Código
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- VILLAS DOÑA OLGA -->
+    <article class="case">
+      <div class="case-meta">
+        <span class="status live">En producción</span>
+        <dl>
+          <dt>Rol</dt>
+          <dd>Desarrolladora full-stack única</dd>
+          <dt>Contexto</dt>
+          <dd>Cliente real — proyecto inmobiliario familiar</dd>
+          <dt>Despliegue</dt>
+          <dd>Netlify</dd>
+        </dl>
+      </div>
+      <div class="case-body">
+        <h3>Villas Doña Olga</h3>
+        <span class="case-tag">Sitio de comercialización de lotes residenciales</span>
+        <p>
+          Sitio web para la venta de más de 50 lotes residenciales en Panamá. Permite a los
+          compradores consultar disponibilidad en tiempo real, revisar el plan de financiamiento
+          directo, ver el avance del proyecto en fotos, y contactar al vendedor por WhatsApp o
+          correo sin fricciones.
+        </p>
+        <p>
+          Un proyecto con cliente real (familia) que además me sirvió para demostrar un stack
+          full-stack moderno de punta a punta, desde el build hasta el despliegue continuo.
+        </p>
+        <div class="stack-row">
+          <span class="chip">React</span><span class="chip">TypeScript</span>
+          <span class="chip">Vite</span><span class="chip">Tailwind CSS</span>
+          <span class="chip">shadcn/ui</span><span class="chip">Netlify</span>
+        </div>
+        <div class="case-links">
+          <a href="https://github.com/MarianC-programing/villas_do-a_olga" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>
+            Código
+          </a>
+          <a href="https://villasolgapam.netlify.app/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+            Demo en vivo
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- EVAC -->
+    <article class="case">
+      <div class="case-meta">
+        <span class="status delivered">Entregado</span>
+        <dl>
+          <dt>Rol</dt>
+          <dd>Desarrolladora full-stack única</dd>
+          <dt>Contexto</dt>
+          <dd>Proyecto personal — logística de envíos</dd>
+          <dt>Despliegue</dt>
+          <dd>Repositorio (sin demo pública)</dd>
+        </dl>
+      </div>
+      <div class="case-body">
+        <h3>Evac Shipping</h3>
+        <span class="case-tag">Plataforma de gestión de envíos EE. UU. → Panamá</span>
+        <p>
+          Sistema para gestionar el envío de paquetes de Estados Unidos a Panamá: los usuarios
+          se registran y rastrean sus paquetes por peso y estado, mientras que el panel de
+          administración centraliza clientes, mensajes de soporte y el CRUD completo de envíos.
+        </p>
+        <p>
+          El acceso administrativo va protegido con doble verificación (token de servidor + rol
+          de usuario), y toda la API sigue una arquitectura REST con validación de datos vía Zod.
+        </p>
+        <div class="stack-row">
+          <span class="chip">React</span><span class="chip">Node.js</span>
+          <span class="chip">Express</span><span class="chip">SQLite</span>
+          <span class="chip">Drizzle ORM</span><span class="chip">Zod</span><span class="chip">bcrypt</span>
+        </div>
+        <div class="case-links">
+          <a href="https://github.com/MarianC-programing/Evac-Shipping" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>
+            Código
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- HORARIOSWEB -->
+    <article class="case">
+      <div class="case-meta">
+        <span class="status dev">Prototipo activo</span>
+        <dl>
+          <dt>Rol</dt>
+          <dd>Desarrolladora full-stack única</dd>
+          <dt>Contexto</dt>
+          <dd>Herramienta para estudiantes de la UTP</dd>
+          <dt>Despliegue</dt>
+          <dd>GitHub Pages · sin backend</dd>
+        </dl>
+      </div>
+      <div class="case-body">
+        <h3>HorariosWeb — Cruza Horarios UTP</h3>
+        <span class="case-tag">Generador de combinaciones de horario sin choques</span>
+        <p>
+          En la UTP, armar un horario sin que dos clases se crucen es un rompecabezas manual.
+          Esta herramienta lee el horario oficial (PDF o imagen, con OCR tolerante a errores),
+          deja revisar y corregir lo detectado, y genera todas las combinaciones de secciones
+          posibles según las materias y el turno que el estudiante prefiera.
+        </p>
+        <p>
+          Todo el procesamiento — lectura del documento, comparación de horarios, guardado —
+          ocurre en el navegador. No hay servidor ni base de datos: es una decisión de diseño
+          deliberada para que el estudiante no tenga que confiarle su horario a nadie más.
+        </p>
+        <div class="stack-row">
+          <span class="chip">JavaScript</span><span class="chip">OCR</span>
+          <span class="chip">Lectura de PDF</span><span class="chip">LocalStorage</span>
+          <span class="chip">GitHub Pages</span>
+        </div>
+        <div class="case-links">
+          <a href="https://github.com/MarianC-programing/HorarioWeb" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>
+            Código
+          </a>
+          <a href="https://marianc-programing.github.io/HorarioWeb/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+            Demo en vivo
+          </a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="contact wrap" id="contacto">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="eyebrow mono">Contacto</div>
+        <h2>¿Tienes un proyecto en mente?</h2>
+        <p>
+          Cuéntame qué necesitas construir. Respondo por correo o por el formulario — lo que te
+          quede más cómodo.
+        </p>
+        <div class="contact-channels">
+          <a href="mailto:marianbarba1208@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+            marianbarba1208@gmail.com
+          </a>
+          <a href="https://github.com/MarianC-programing" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>
+            github.com/MarianC-programing
+          </a>
+          <a href="https://www.linkedin.com/in/marian-barba/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 6.5A1.94 1.94 0 1 1 6.93 2.62a1.94 1.94 0 0 1 .01 3.88ZM2.4 8.75h5.08V21.5H2.4V8.75Zm7.86 0h4.87v1.74h.07c.68-1.24 2.33-2.55 4.8-2.55 5.13 0 6.08 3.28 6.08 7.54v7.02h-5.07v-6.22c0-1.49-.03-3.4-2.08-3.4-2.08 0-2.4 1.6-2.4 3.3v6.32h-5.07V8.75Z"/></svg>
+            linkedin.com/in/marian-barba
+          </a>
+        </div>
+      </div>
+
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/mgognkzr" method="POST">
+        <div class="field">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" name="name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="email">Correo</label>
+          <input type="email" id="email" name="_replyto" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="message">Mensaje</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary submit-btn">Enviar mensaje</button>
+        <output class="form-status" id="formStatus"></output>
+        <p class="form-note">Se envía directo a mi correo vía Formspree — sin backend propio.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© 2026 Marian Barba.</span>
+    <a href="#top">Volver arriba ↑</a>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Contact form — Formspree via fetch, no page reload
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.textContent = 'Enviando…';
+    status.className = 'form-status';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        status.textContent = '¡Mensaje enviado! Te responderé pronto.';
+        status.className = 'form-status ok';
+        form.reset();
+      } else {
+        status.textContent = 'No se pudo enviar. Escríbeme directo por correo, por favor.';
+        status.className = 'form-status err';
+      }
+    } catch {
+      status.textContent = 'No se pudo enviar. Escríbeme directo por correo, por favor.';
+      status.className = 'form-status err';
+    }
+  });
+</script>
+
+</body>
+</html>
