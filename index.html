@@ -139,12 +139,12 @@
     position:absolute; left:50%; top:46%; width:130%; aspect-ratio:1; transform:translate(-50%,-50%);
     background:radial-gradient(closest-side, rgba(255,255,255,.55), rgba(255,255,255,0)); pointer-events:none;
   }
-  .memoji-float{ position:absolute; inset:0; animation:float 6s ease-in-out infinite; }
+  .memoji-float{ position:absolute; inset:0; }
   @keyframes float{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-12px);} }
   .memoji-shadow{
     position:absolute; left:50%; bottom:-14px; width:64%; height:22px; border-radius:50%;
     background:radial-gradient(closest-side, rgba(20,50,110,.38), rgba(20,50,110,0)); filter:blur(3px);
-    transform:translateX(-50%); animation:shadow 6s ease-in-out infinite; pointer-events:none;
+    transform:translateX(-50%); pointer-events:none;
   }
   @keyframes shadow{ 0%,100%{ transform:translateX(-50%) scale(1); opacity:.9;} 50%{ transform:translateX(-50%) scale(.8); opacity:.55;} }
   .memoji-wave-wrap{ position:absolute; inset:0; transform-origin:50% 90%; }
@@ -226,25 +226,23 @@
   @media (max-width:900px){ .about-grid{ grid-template-columns:1fr; gap:44px; } }
 
   /* ---------- Ecosystem arc ---------- */
-  .arc-section{ padding:60px 0 90px; overflow:hidden; }
-  .arc{ position:relative; height:520px; max-width:1100px; margin:0 auto; }
-  .arc-center{ position:absolute; left:50%; top:54%; transform:translate(-50%,-50%); width:min(480px, 88%); text-align:center; z-index:2; }
+  .arc-section{ padding:120px 0 90px; overflow-x:clip; }
+  .arc{ position:relative; height:clamp(580px, 56vw, 680px); max-width:1320px; margin:0 auto; }
+  .arc-center{ position:absolute; left:50%; top:68%; transform:translate(-50%,-50%); width:min(500px, 88%); text-align:center; z-index:2; }
   .arc-center h2{ font-size:clamp(2.4rem, 5vw, 4rem); margin:18px 0 14px; }
   .arc-center p{ color:var(--ink-soft); }
-  .arc-icon{
-    position:absolute; transform:translate(-50%,-50%);
-    border-radius:50%; background:#fff; box-shadow:0 10px 28px rgba(30,30,20,.12); border:1px solid rgba(0,0,0,.04);
-    display:grid; place-items:center;
-    animation:bob var(--dur,6s) ease-in-out infinite; animation-delay:var(--delay,0s);
-    transition:box-shadow .2s;
+  .arc-icon{ position:absolute; left:0; top:0; opacity:0; will-change:transform, opacity; }
+  .arc-icon .face{
+    width:100%; height:100%; border-radius:50%; background:#fff; border:1px solid rgba(0,0,0,.04);
+    box-shadow:0 14px 34px rgba(30,30,20,.13); display:grid; place-items:center;
+    transition:transform .3s cubic-bezier(.3,1.5,.5,1), box-shadow .3s ease;
   }
-  .arc-icon:hover{ box-shadow:0 16px 36px rgba(30,30,20,.2); }
-  .arc-icon img{ width:52%; height:52%; object-fit:contain; }
-  @keyframes bob{ 0%,100%{ margin-top:0; } 50%{ margin-top:calc(var(--amp,10px) * -1); } }
+  .arc-icon:hover .face{ transform:scale(1.12); box-shadow:0 24px 46px rgba(30,30,20,.22); }
+  .arc-icon img{ width:54%; height:54%; object-fit:contain; }
   @media (max-width:720px){
-    .arc{ height:auto; display:flex; flex-wrap:wrap; justify-content:center; gap:14px; padding:0 20px; }
-    .arc-center{ position:static; transform:none; width:100%; margin-bottom:24px; }
-    .arc-icon{ position:static; transform:none; width:60px !important; height:60px !important; }
+    .arc{ height:auto; display:flex; flex-wrap:wrap; justify-content:center; gap:16px; padding:0 20px; }
+    .arc-center{ position:static; transform:none; width:100%; margin-bottom:26px; }
+    .arc-icon{ position:static; opacity:1 !important; transform:none !important; width:72px !important; height:72px !important; }
   }
 
   /* ---------- Bento ---------- */
@@ -444,10 +442,6 @@
       <div class="memoji-wave-wrap">
         <div class="memoji-tilt" id="memojiTilt">
           <img class="front" src="assets/memoji/memoji-front.webp" alt="" width="280" height="291">
-          <img class="right" src="assets/memoji/memoji-right.webp" alt="" width="280" height="291">
-          <img class="left"  src="assets/memoji/memoji-right.webp" alt="" width="280" height="291">
-          <img class="up"    src="assets/memoji/memoji-up.webp" alt="" width="280" height="291">
-          <img class="down"  src="assets/memoji/memoji-down.webp" alt="" width="280" height="291">
         </div>
       </div>
     </div>
@@ -883,75 +877,20 @@
     revealEls.forEach(el => io.observe(el));
   } else { revealEls.forEach(el => el.classList.add('in')); }
 
-  /* ---------- Memoji interactivo (movimiento continuo) ---------- */
-  const hero = document.getElementById('hero');
+  /* ---------- Memoji: saluda al tocar los enlaces ---------- */
   const stage = document.getElementById('memojiStage');
-  const tilt = document.getElementById('memojiTilt');
-  if (stage && tilt && !prefersReduced) {
-    const pose = {
-      right: tilt.querySelector('img.right'), left: tilt.querySelector('img.left'),
-      up: tilt.querySelector('img.up'), down: tilt.querySelector('img.down')
+  if (stage) {
+    const MIN_MS = 1300;                 // dura al menos esto (también al tocar en el celular)
+    let started = 0, timer = null;
+    const on = () => { clearTimeout(timer); started = performance.now(); stage.classList.add('is-waving'); };
+    const off = () => {
+      clearTimeout(timer);
+      const left = Math.max(0, MIN_MS - (performance.now() - started));
+      timer = setTimeout(() => stage.classList.remove('is-waving'), left);
     };
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-    const smoothstep = (e0, e1, v) => { const t = clamp((v - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
-
-    // tx,ty: objetivo (cursor) · x,y: posición del resorte · vx,vy: velocidad
-    const s = { tx:0, ty:0, x:0, y:0, vx:0, vy:0, last:0 };
-    const IDLE_MS = 2200;      // quieto este tiempo → vuelve al centro
-    const OMEGA = 7.5;         // rigidez del resorte (más alto = más rápido)
-    const ZETA = 0.88;         // amortiguación (1 = sin rebote)
-    let waving = false, visible = true;
-
-    window.addEventListener('pointermove', (e) => {
-      const r = stage.getBoundingClientRect();
-      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      s.tx = clamp((e.clientX - cx) / (window.innerWidth / 2), -1, 1);
-      s.ty = clamp((e.clientY - cy) / (window.innerHeight / 2), -1, 1);
-      s.last = performance.now();
-    }, { passive:true });
-    document.addEventListener('pointerleave', () => { s.tx = 0; s.ty = 0; });
-    window.addEventListener('blur', () => { s.tx = 0; s.ty = 0; });
-
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver((en) => { visible = en[0].isIntersecting; }, { threshold:0 }).observe(hero);
-    }
-
-    let prev = performance.now();
-    const frame = (now) => {
-      const dt = Math.min((now - prev) / 1000, 1 / 30); prev = now;
-      if (visible) {
-        if (now - s.last > IDLE_MS) { s.tx = 0; s.ty = 0; }
-        const gx = waving ? 0 : s.tx, gy = waving ? 0 : s.ty;   // saludando: mira de frente
-
-        // Resorte amortiguado independiente de los FPS
-        s.vx += (OMEGA * OMEGA * (gx - s.x) - 2 * ZETA * OMEGA * s.vx) * dt; s.x += s.vx * dt;
-        s.vy += (OMEGA * OMEGA * (gy - s.y) - 2 * ZETA * OMEGA * s.vy) * dt; s.y += s.vy * dt;
-
-        // Inclinación 3D continua + leve desplazamiento
-        tilt.style.transform =
-          `translate3d(${(s.x * 14).toFixed(2)}px, ${(s.y * 9).toFixed(2)}px, 0) ` +
-          `rotateY(${(s.x * 11).toFixed(2)}deg) rotateX(${(-s.y * 9).toFixed(2)}deg)`;
-
-        // Mezcla gradual de poses (la frontal siempre queda debajo, sin parpadeos)
-        const ax = Math.abs(s.x), ay = Math.abs(s.y), k = ax / (ax + ay + 1e-6);
-        pose.right.style.opacity = (smoothstep(0.08, 0.85,  s.x) * k).toFixed(3);
-        pose.left.style.opacity  = (smoothstep(0.08, 0.85, -s.x) * k).toFixed(3);
-        pose.down.style.opacity  = (smoothstep(0.10, 0.85,  s.y) * (1 - k)).toFixed(3);
-        pose.up.style.opacity    = (smoothstep(0.10, 0.85, -s.y) * (1 - k)).toFixed(3);
-
-        hero.style.setProperty('--px', s.x.toFixed(3));
-        hero.style.setProperty('--py', s.y.toFixed(3));
-      }
-      requestAnimationFrame(frame);
-    };
-    requestAnimationFrame(frame);
-
-    // Estado alterno: saludo al pasar sobre los botones principales
-    document.querySelectorAll('[data-wave]').forEach(el => {
-      const on = () => { waving = true; stage.classList.add('is-waving'); };
-      const off = () => { waving = false; stage.classList.remove('is-waving'); };
-      el.addEventListener('pointerenter', on); el.addEventListener('pointerleave', off);
-      el.addEventListener('focus', on); el.addEventListener('blur', off);
+    document.querySelectorAll('[data-wave], .nav a, .hero-cta a').forEach(el => {
+      el.addEventListener('pointerenter', on); el.addEventListener('pointerdown', on);
+      el.addEventListener('pointerleave', off); el.addEventListener('focus', on); el.addEventListener('blur', off);
     });
   }
 
@@ -977,29 +916,66 @@
   document.getElementById('nextSlide').addEventListener('click', () => { go(current + 1); restart(); });
   restart();
 
-  /* ---------- Arco de herramientas ---------- */
+  /* ---------- Arco de herramientas: flotan y se deslizan por el arco ---------- */
   const arc = document.getElementById('arc');
   const tools = [
-    ['react','61DAFB','React',70], ['typescript','3178C6','TypeScript',58], ['vuedotjs','4FC08D','Vue.js',64],
-    ['tailwindcss','06B6D4','Tailwind CSS',60], ['vite','646CFF','Vite',56], ['figma','F24E1E','Figma',66],
-    ['nodedotjs','339933','Node.js',72], ['laravel','FF2D20','Laravel',58], ['postgresql','4169E1','PostgreSQL',68],
-    ['mysql','4479A1','MySQL',60], ['git','F05032','Git',64], ['github','181717','GitHub',76],
-    ['supabase','3FCF8E','Supabase',58], ['vercel','000000','Vercel',56]
+    ['vuedotjs','4FC08D','Vue.js',84], ['mysql','4479A1','MySQL',92], ['git','F05032','Git',80],
+    ['nodedotjs','339933','Node.js',100], ['react','61DAFB','React',112], ['typescript','3178C6','TypeScript',86],
+    ['github','181717','GitHub',108], ['tailwindcss','06B6D4','Tailwind CSS',92], ['postgresql','4169E1','PostgreSQL',100],
+    ['laravel','FF2D20','Laravel',82], ['figma','F24E1E','Figma',90], ['supabase','3FCF8E','Supabase',80]
   ];
-  const n = tools.length;
-  tools.forEach(([slug, color, name, size], i) => {
-    const t = i / (n - 1);                         // 0..1 a lo largo del arco
-    const angle = (200 - t * 220) * Math.PI / 180; // de 200° a -20°
-    const rx = 47, ry = 78;                        // radios en %
-    const left = 50 + rx * Math.cos(angle);
-    const top = 70 - ry * Math.sin(angle);
+  const icons = tools.map(([slug, color, name, size], i) => {
     const el = document.createElement('div');
-    el.className = 'arc-icon';
-    el.style.cssText = `left:${left}%;top:${top}%;width:${size}px;height:${size}px;--dur:${5 + (i % 4)}s;--delay:${-(i * 0.7)}s;--amp:${8 + (i % 3) * 4}px;`;
-    el.title = name;
-    el.innerHTML = `<img src="https://cdn.simpleicons.org/${slug}/${color}" alt="${name}" loading="lazy">`;
+    el.className = 'arc-icon'; el.title = name;
+    el.innerHTML = `<div class="face"><img src="https://cdn.simpleicons.org/${slug}/${color}" alt="${name}" loading="lazy"></div>`;
     arc.appendChild(el);
+    return { el, size, px:size, ph:i * 1.7, sp:0.35 + (i % 5) * 0.07 };
   });
+
+  const A = { W:0, H:0, f:1, mobile:false, visible:false, t0:null };
+  const clamp01 = (v) => Math.max(0, Math.min(1, v));
+  const easeOutBack = (p) => { const c1 = 1.70158; return 1 + (c1 + 1) * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+
+  function measureArc() {
+    A.W = arc.clientWidth; A.H = arc.clientHeight; A.mobile = window.innerWidth <= 720;
+    A.f = Math.max(0.7, Math.min(1, A.W / 1100));
+    icons.forEach(ic => {
+      ic.px = Math.round(ic.size * A.f);
+      if (A.mobile) { ic.el.style.width = ic.el.style.height = ''; ic.el.style.transform = ''; ic.el.style.opacity = ''; }
+      else { ic.el.style.width = ic.el.style.height = ic.px + 'px'; }
+    });
+  }
+  function placeArc(t, still) {
+    if (A.mobile) return;
+    const n = icons.length, cx = A.W / 2, cy = A.H * 0.66;
+    const rx = Math.min(A.W * 0.41, 560), ry = A.H * 0.5;
+    icons.forEach((ic, i) => {
+      const base = 196 - (i / (n - 1)) * 212;                              // 196° → −16°
+      const drift = still ? 0 : Math.sin(t * ic.sp + ic.ph) * 2.2;           // se desliza por el arco
+      const a = (base + drift) * Math.PI / 180;
+      const radial = 1 + (i % 2 ? 0.05 : -0.03) + (still ? 0 : Math.sin(t * ic.sp * 0.8 + ic.ph * 1.3) * 0.012);
+      const bob = still ? 0 : Math.sin(t * ic.sp * 1.6 + ic.ph * 0.7) * 9;   // flotación suave
+      const x = cx + rx * radial * Math.cos(a) - ic.px / 2;
+      const y = cy - ry * radial * Math.sin(a) + bob - ic.px / 2;
+      const p = still ? 1 : clamp01((t - i * 0.07) / 0.8);                   // entrada escalonada
+      ic.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${(0.55 + 0.45 * easeOutBack(p)).toFixed(3)})`;
+      ic.el.style.opacity = clamp01(p * 1.6).toFixed(2);
+    });
+  }
+  measureArc(); placeArc(0, true);
+  window.addEventListener('resize', () => { measureArc(); placeArc(performance.now() / 1000 - (A.t0 ?? 0), prefersReduced || A.t0 === null); });
+
+  if (!prefersReduced && 'IntersectionObserver' in window) {
+    new IntersectionObserver((en) => {
+      A.visible = en[0].isIntersecting;
+      if (A.visible && A.t0 === null) A.t0 = performance.now() / 1000;
+    }, { threshold:0.15 }).observe(arc);
+    const arcLoop = (now) => {
+      if (A.visible && A.t0 !== null) placeArc(now / 1000 - A.t0, false);
+      requestAnimationFrame(arcLoop);
+    };
+    requestAnimationFrame(arcLoop);
+  }
 
   /* ---------- Snippets del card Frontend ---------- */
   const snippets = {
