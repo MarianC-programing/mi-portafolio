@@ -149,17 +149,13 @@
   @keyframes shadow{ 0%,100%{ transform:translateX(-50%) scale(1); opacity:.9;} 50%{ transform:translateX(-50%) scale(.8); opacity:.55;} }
   .memoji-wave-wrap{ position:absolute; inset:0; transform-origin:50% 90%; }
   .memoji-tilt{ position:absolute; inset:0; transform-style:preserve-3d; will-change:transform; }
+  .memoji-tilt{ filter:drop-shadow(0 18px 24px rgba(20,50,110,.28)); }
   .memoji-tilt img{
     position:absolute; inset:0; width:100%; height:100%; object-fit:contain;
-    opacity:0; transition:opacity .18s ease; user-select:none; -webkit-user-drag:none;
-    filter:drop-shadow(0 18px 24px rgba(20,50,110,.28));
+    opacity:0; user-select:none; -webkit-user-drag:none; will-change:opacity;
   }
+  .memoji-tilt img.front{ opacity:1; }
   .memoji-tilt img.left{ transform:scaleX(-1); }
-  .memoji-stage[data-pose="front"] img.front,
-  .memoji-stage[data-pose="right"] img.right,
-  .memoji-stage[data-pose="left"] img.left,
-  .memoji-stage[data-pose="up"] img.up,
-  .memoji-stage[data-pose="down"] img.down{ opacity:1; }
   .memoji-bubble{
     position:absolute; top:2%; right:-8%; z-index:3;
     width:58px; height:58px; border-radius:50%; background:#fff; box-shadow:0 10px 26px rgba(20,50,110,.25);
@@ -887,61 +883,72 @@
     revealEls.forEach(el => io.observe(el));
   } else { revealEls.forEach(el => el.classList.add('in')); }
 
-  /* ---------- Memoji interactivo ---------- */
+  /* ---------- Memoji interactivo (movimiento continuo) ---------- */
   const hero = document.getElementById('hero');
   const stage = document.getElementById('memojiStage');
   const tilt = document.getElementById('memojiTilt');
   if (stage && tilt && !prefersReduced) {
-    const state = {
-      tx:0, ty:0,                       // objetivo normalizado (-1..1)
-      x:0, y:0, vx:0, vy:0,             // posición y velocidad del resorte
-      lastMove:0
+    const pose = {
+      right: tilt.querySelector('img.right'), left: tilt.querySelector('img.left'),
+      up: tilt.querySelector('img.up'), down: tilt.querySelector('img.down')
     };
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-    let waving = false;
+    const smoothstep = (e0, e1, v) => { const t = clamp((v - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
 
-    const setPose = (nx, ny) => {
-      let pose = 'front';
-      if (!waving) {
-        if (Math.abs(nx) >= Math.abs(ny)) { if (nx > 0.32) pose = 'right'; else if (nx < -0.32) pose = 'left'; }
-        else { if (ny < -0.34) pose = 'up'; else if (ny > 0.34) pose = 'down'; }
-      }
-      if (stage.dataset.pose !== pose) stage.dataset.pose = pose;
-    };
+    // tx,ty: objetivo (cursor) · x,y: posición del resorte · vx,vy: velocidad
+    const s = { tx:0, ty:0, x:0, y:0, vx:0, vy:0, last:0 };
+    const IDLE_MS = 2200;      // quieto este tiempo → vuelve al centro
+    const OMEGA = 7.5;         // rigidez del resorte (más alto = más rápido)
+    const ZETA = 0.88;         // amortiguación (1 = sin rebote)
+    let waving = false, visible = true;
 
-    const onMove = (e) => {
+    window.addEventListener('pointermove', (e) => {
       const r = stage.getBoundingClientRect();
       const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      state.tx = clamp((e.clientX - cx) / (window.innerWidth / 2), -1, 1);
-      state.ty = clamp((e.clientY - cy) / (window.innerHeight / 2), -1, 1);
-      state.lastMove = performance.now();
+      s.tx = clamp((e.clientX - cx) / (window.innerWidth / 2), -1, 1);
+      s.ty = clamp((e.clientY - cy) / (window.innerHeight / 2), -1, 1);
+      s.last = performance.now();
+    }, { passive:true });
+    document.addEventListener('pointerleave', () => { s.tx = 0; s.ty = 0; });
+    window.addEventListener('blur', () => { s.tx = 0; s.ty = 0; });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((en) => { visible = en[0].isIntersecting; }, { threshold:0 }).observe(hero);
+    }
+
+    let prev = performance.now();
+    const frame = (now) => {
+      const dt = Math.min((now - prev) / 1000, 1 / 30); prev = now;
+      if (visible) {
+        if (now - s.last > IDLE_MS) { s.tx = 0; s.ty = 0; }
+        const gx = waving ? 0 : s.tx, gy = waving ? 0 : s.ty;   // saludando: mira de frente
+
+        // Resorte amortiguado independiente de los FPS
+        s.vx += (OMEGA * OMEGA * (gx - s.x) - 2 * ZETA * OMEGA * s.vx) * dt; s.x += s.vx * dt;
+        s.vy += (OMEGA * OMEGA * (gy - s.y) - 2 * ZETA * OMEGA * s.vy) * dt; s.y += s.vy * dt;
+
+        // Inclinación 3D continua + leve desplazamiento
+        tilt.style.transform =
+          `translate3d(${(s.x * 14).toFixed(2)}px, ${(s.y * 9).toFixed(2)}px, 0) ` +
+          `rotateY(${(s.x * 11).toFixed(2)}deg) rotateX(${(-s.y * 9).toFixed(2)}deg)`;
+
+        // Mezcla gradual de poses (la frontal siempre queda debajo, sin parpadeos)
+        const ax = Math.abs(s.x), ay = Math.abs(s.y), k = ax / (ax + ay + 1e-6);
+        pose.right.style.opacity = (smoothstep(0.08, 0.85,  s.x) * k).toFixed(3);
+        pose.left.style.opacity  = (smoothstep(0.08, 0.85, -s.x) * k).toFixed(3);
+        pose.down.style.opacity  = (smoothstep(0.10, 0.85,  s.y) * (1 - k)).toFixed(3);
+        pose.up.style.opacity    = (smoothstep(0.10, 0.85, -s.y) * (1 - k)).toFixed(3);
+
+        hero.style.setProperty('--px', s.x.toFixed(3));
+        hero.style.setProperty('--py', s.y.toFixed(3));
+      }
+      requestAnimationFrame(frame);
     };
-    window.addEventListener('pointermove', onMove, { passive:true });
-    document.addEventListener('pointerleave', () => { state.tx = 0; state.ty = 0; });
-    window.addEventListener('blur', () => { state.tx = 0; state.ty = 0; });
-
-    // Cuando el cursor está quieto un rato, regresa suavemente al centro
-    const IDLE_MS = 2200;
-
-    const STIFF = 0.085, DAMP = 0.76;
-    const loop = (now) => {
-      if (now - state.lastMove > IDLE_MS) { state.tx = 0; state.ty = 0; }
-      state.vx += (state.tx - state.x) * STIFF; state.vx *= DAMP; state.x += state.vx;
-      state.vy += (state.ty - state.y) * STIFF; state.vy *= DAMP; state.y += state.vy;
-
-      const rotY = state.x * 16, rotX = -state.y * 12;
-      const moveX = state.x * 16, moveY = state.y * 10;
-      tilt.style.transform = `translate3d(${moveX}px, ${moveY}px, 0) rotateY(${rotY}deg) rotateX(${rotX}deg)`;
-      hero.style.setProperty('--px', state.x.toFixed(3));
-      hero.style.setProperty('--py', state.y.toFixed(3));
-      setPose(state.tx, state.ty);
-      requestAnimationFrame(loop);
-    };
-    requestAnimationFrame(loop);
+    requestAnimationFrame(frame);
 
     // Estado alterno: saludo al pasar sobre los botones principales
     document.querySelectorAll('[data-wave]').forEach(el => {
-      const on = () => { waving = true; stage.classList.add('is-waving'); stage.dataset.pose = 'front'; };
+      const on = () => { waving = true; stage.classList.add('is-waving'); };
       const off = () => { waving = false; stage.classList.remove('is-waving'); };
       el.addEventListener('pointerenter', on); el.addEventListener('pointerleave', off);
       el.addEventListener('focus', on); el.addEventListener('blur', off);
