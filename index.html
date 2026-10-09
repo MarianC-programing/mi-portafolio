@@ -100,7 +100,8 @@
     position:relative; min-height:100svh; overflow:hidden; isolation:isolate;
     background:linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 58%, var(--sky-3) 100%);
     display:flex; flex-direction:column; align-items:center; text-align:center;
-    padding:148px 24px 0;
+    padding:128px 24px 30px;
+    border-radius:0 0 48px 48px;
     --px:0; --py:0;
   }
   .cloud-layer{ position:absolute; inset:0; z-index:-1; pointer-events:none; will-change:transform; }
@@ -119,21 +120,20 @@
   @keyframes drift{ from{ transform:translateX(-60px); } to{ transform:translateX(90px); } }
   .eyebrow-serif{
     font-family:var(--serif); font-size:.9rem; letter-spacing:.3em; text-transform:uppercase;
-    color:rgba(255,255,255,.88); margin-bottom:22px;
+    color:rgba(255,255,255,.88); margin-bottom:16px;
   }
   .hero h1{
-    font-size:clamp(3rem, 7.4vw, 6rem); color:#fff; max-width:15ch; line-height:1;
+    font-size:clamp(2.4rem, 5.2vw, 4.4rem); color:#fff; max-width:15em; line-height:1.04;
     text-shadow:0 2px 40px rgba(40,80,150,.25);
   }
   .hero h1 em{ font-style:italic; }
-  .hero .sub{ max-width:46ch; margin:26px 0 34px; font-size:1.12rem; color:rgba(255,255,255,.92); }
-  .hero-cta{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .hero .sub{ max-width:50ch; margin:20px 0 28px; font-size:1.08rem; color:rgba(255,255,255,.92); }
+  .hero-cta{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:22px; }
 
   /* Memoji stage */
   .memoji-stage{
-    position:relative; margin-top:auto; margin-bottom:-34px;
-    width:min(300px, 64vw); aspect-ratio:280/291; perspective:900px; z-index:2;
-    padding-top:0;
+    position:relative; margin-top:auto; margin-bottom:0;
+    width:min(236px, 56vw); aspect-ratio:280/291; perspective:900px; z-index:2;
   }
   .memoji-glow{
     position:absolute; left:50%; top:46%; width:130%; aspect-ratio:1; transform:translate(-50%,-50%);
@@ -141,6 +141,12 @@
   }
   .memoji-float{ position:absolute; inset:0; animation:float 6s ease-in-out infinite; }
   @keyframes float{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-12px);} }
+  .memoji-shadow{
+    position:absolute; left:50%; bottom:-14px; width:64%; height:22px; border-radius:50%;
+    background:radial-gradient(closest-side, rgba(20,50,110,.38), rgba(20,50,110,0)); filter:blur(3px);
+    transform:translateX(-50%); animation:shadow 6s ease-in-out infinite; pointer-events:none;
+  }
+  @keyframes shadow{ 0%,100%{ transform:translateX(-50%) scale(1); opacity:.9;} 50%{ transform:translateX(-50%) scale(.8); opacity:.55;} }
   .memoji-wave-wrap{ position:absolute; inset:0; transform-origin:50% 90%; }
   .memoji-tilt{ position:absolute; inset:0; transform-style:preserve-3d; will-change:transform; }
   .memoji-tilt img{
@@ -343,7 +349,12 @@
 
   /* ---------- FAQ ---------- */
   .faq{ background:#fff; }
-  .faq-wrap{ max-width:820px; margin:0 auto; }
+  .faq-wide{ max-width:1520px; padding:0 clamp(24px, 5vw, 88px); display:grid; grid-template-columns:minmax(260px, .75fr) 1.7fr; gap:clamp(32px, 6vw, 110px); align-items:start; }
+  .faq-side{ position:sticky; top:110px; }
+  .faq-side h2{ font-size:clamp(2.3rem, 4.6vw, 3.8rem); margin:18px 0 16px; }
+  .faq-side p{ color:var(--ink-soft); max-width:34ch; margin-bottom:26px; }
+  .faq-wrap{ max-width:none; }
+  @media (max-width:900px){ .faq-wide{ grid-template-columns:1fr; } .faq-side{ position:static; } }
   details{ border-top:1px solid var(--line); padding:6px 0; }
   details:last-of-type{ border-bottom:1px solid var(--line); }
   summary{
@@ -386,12 +397,12 @@
   .foot a{ text-decoration:none; } .foot a:hover{ color:var(--ink); }
 
   /* Reveal */
-  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
-  .reveal.in{ opacity:1; transform:none; }
+  .reveal{ opacity:0; translate:0 22px; transition:opacity .7s ease, translate .7s ease, transform .25s ease, box-shadow .25s ease; }
+  .reveal.in{ opacity:1; translate:0 0; }
 
   @media (prefers-reduced-motion: reduce){
     *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
-    .reveal{ opacity:1; transform:none; }
+    .reveal{ opacity:1; translate:none; }
   }
 </style>
 </head>
@@ -432,6 +443,7 @@
 
   <div class="memoji-stage" id="memojiStage" data-pose="front" aria-hidden="true">
     <div class="memoji-glow"></div>
+    <div class="memoji-shadow"></div>
     <div class="memoji-float">
       <div class="memoji-wave-wrap">
         <div class="memoji-tilt" id="memojiTilt">
@@ -560,7 +572,7 @@
           <div class="logo" data-s="js" title="JavaScript"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript" loading="lazy"></div>
           <div class="logo" data-s="ts" title="TypeScript"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript" loading="lazy"></div>
           <div class="logo" data-s="html" title="HTML5"><img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" loading="lazy"></div>
-          <div class="logo" data-s="css" title="CSS3"><img src="https://cdn.simpleicons.org/css3/1572B6" alt="CSS3" loading="lazy"></div>
+          <div class="logo" data-s="css" title="CSS3"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" loading="lazy"></div>
           <div class="logo" data-s="tw" title="Tailwind CSS"><img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="Tailwind CSS" loading="lazy"></div>
         </div>
         <div class="snippet" id="snippet"><small>React</small><span id="snippetCode"></span></div>
@@ -574,7 +586,7 @@
         <span class="cat">Testing &amp; QA</span>
         <div class="logos">
           <div class="logo" title="Vitest"><img src="https://cdn.simpleicons.org/vitest/6E9F18" alt="Vitest" loading="lazy"></div>
-          <div class="logo" title="Playwright"><img src="https://cdn.simpleicons.org/playwright/2EAD33" alt="Playwright" loading="lazy"></div>
+          <div class="logo" title="Playwright"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/playwright/playwright-original.svg" alt="Playwright" loading="lazy"></div>
           <div class="logo" title="SonarQube" style="font-size:.62rem">Sonar<br>Qube</div>
           <div class="logo" title="ISTQB" style="font-size:.7rem">ISTQB</div>
         </div>
@@ -609,7 +621,7 @@
           <div class="logo" title="PostgreSQL"><img src="https://cdn.simpleicons.org/postgresql/6B9BD6" alt="PostgreSQL" loading="lazy"></div>
           <div class="logo" title="MySQL"><img src="https://cdn.simpleicons.org/mysql/5BA3D0" alt="MySQL" loading="lazy"></div>
           <div class="logo" title="SQLite"><img src="https://cdn.simpleicons.org/sqlite/66B3E0" alt="SQLite" loading="lazy"></div>
-          <div class="logo" title="Oracle"><img src="https://cdn.simpleicons.org/oracle/F80000" alt="Oracle" loading="lazy"></div>
+          <div class="logo" title="Oracle"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oracle/oracle-original.svg" alt="Oracle" loading="lazy"></div>
         </div>
         <div class="arch"><span>REST API</span><span>MVC</span><span>DAO / JDBC</span><span>ORM · Drizzle</span><span>Auth · bcrypt</span></div>
         <ul>
@@ -623,7 +635,7 @@
         <span class="cat">Herramientas &amp; flujo de trabajo</span>
         <div class="logos">
           <div class="logo" title="Figma"><img src="https://cdn.simpleicons.org/figma/F24E1E" alt="Figma" loading="lazy"></div>
-          <div class="logo" title="VS Code"><img src="https://cdn.simpleicons.org/visualstudiocode/007ACC" alt="VS Code" loading="lazy"></div>
+          <div class="logo" title="VS Code"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="VS Code" loading="lazy"></div>
           <div class="logo" title="Debian"><img src="https://cdn.simpleicons.org/debian/A81D33" alt="Debian" loading="lazy"></div>
           <div class="logo" title="Postman"><img src="https://cdn.simpleicons.org/postman/FF6C37" alt="Postman" loading="lazy"></div>
         </div>
@@ -773,10 +785,12 @@
 
 <!-- ============ FAQ ============ -->
 <section class="section faq" id="faq">
-  <div class="wrap">
-    <div class="section-head center reveal" style="margin-bottom:40px;">
+  <div class="wrap faq-wide">
+    <div class="faq-side reveal">
       <span class="pill">FAQ</span>
       <h2>Preguntas frecuentes</h2>
+      <p>¿No ves tu pregunta? Escríbeme y te respondo.</p>
+      <a href="#contacto" class="btn btn-dark">Contactar</a>
     </div>
     <div class="faq-wrap reveal">
       <details>
