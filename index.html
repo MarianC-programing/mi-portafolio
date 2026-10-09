@@ -916,29 +916,53 @@
   document.getElementById('nextSlide').addEventListener('click', () => { go(current + 1); restart(); });
   restart();
 
-  /* ---------- Arco de herramientas: flotan y se deslizan por el arco ---------- */
+  /* ---------- Arco de herramientas: orden parejo + ola suave ---------- */
   const arc = document.getElementById('arc');
+  // Agrupados de izquierda a derecha: diseño/frontend → núcleo → backend/datos → herramientas/despliegue
   const tools = [
-    ['vuedotjs','4FC08D','Vue.js',84], ['mysql','4479A1','MySQL',92], ['git','F05032','Git',80],
-    ['nodedotjs','339933','Node.js',100], ['react','61DAFB','React',112], ['typescript','3178C6','TypeScript',86],
-    ['github','181717','GitHub',108], ['tailwindcss','06B6D4','Tailwind CSS',92], ['postgresql','4169E1','PostgreSQL',100],
-    ['laravel','FF2D20','Laravel',82], ['figma','F24E1E','Figma',90], ['supabase','3FCF8E','Supabase',80]
+    ['figma','F24E1E','Figma'], ['vuedotjs','4FC08D','Vue.js'], ['tailwindcss','06B6D4','Tailwind CSS'],
+    ['react','61DAFB','React'], ['typescript','3178C6','TypeScript'],
+    ['nodedotjs','339933','Node.js'], ['laravel','FF2D20','Laravel'], ['postgresql','4169E1','PostgreSQL'],
+    ['mysql','4479A1','MySQL'], ['supabase','3FCF8E','Supabase'], ['git','F05032','Git'],
+    ['github','181717','GitHub']
   ];
-  const icons = tools.map(([slug, color, name, size], i) => {
+  const N = tools.length;
+  // Tamaño según la posición: más grandes al centro del arco, más pequeños en las puntas (simétrico)
+  const sizeAt = (i) => Math.round(74 + 32 * Math.pow(Math.sin(Math.PI * (i + 0.5) / N), 1.3));
+  const icons = tools.map(([slug, color, name], i) => {
     const el = document.createElement('div');
     el.className = 'arc-icon'; el.title = name;
     el.innerHTML = `<div class="face"><img src="https://cdn.simpleicons.org/${slug}/${color}" alt="${name}" loading="lazy"></div>`;
     arc.appendChild(el);
-    return { el, size, px:size, ph:i * 1.7, sp:0.35 + (i % 5) * 0.07 };
+    return { el, size:sizeAt(i), px:sizeAt(i) };
   });
 
-  const A = { W:0, H:0, f:1, mobile:false, visible:false, t0:null };
+  const A = { W:0, H:0, f:1, mobile:false, visible:false, t0:null, ang:[], rx:0, ry:0 };
   const clamp01 = (v) => Math.max(0, Math.min(1, v));
   const easeOutBack = (p) => { const c1 = 1.70158; return 1 + (c1 + 1) * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+
+  // Ángulos equidistantes en LONGITUD sobre la elipse (no en grados), para que la separación sea pareja
+  function arcAngles(rx, ry) {
+    const STEPS = 800, a0 = 200 * Math.PI / 180, a1 = -20 * Math.PI / 180;
+    const cum = [0]; let px = rx * Math.cos(a0), py = ry * Math.sin(a0);
+    for (let k = 1; k <= STEPS; k++) {
+      const a = a0 + (a1 - a0) * k / STEPS, x = rx * Math.cos(a), y = ry * Math.sin(a);
+      cum.push(cum[k - 1] + Math.hypot(x - px, y - py)); px = x; py = y;
+    }
+    const total = cum[STEPS], out = []; let k = 0;
+    for (let i = 0; i < N; i++) {
+      const target = total * (i + 0.5) / N;
+      while (k < STEPS && cum[k] < target) k++;
+      out.push(a0 + (a1 - a0) * k / STEPS);
+    }
+    return out;
+  }
 
   function measureArc() {
     A.W = arc.clientWidth; A.H = arc.clientHeight; A.mobile = window.innerWidth <= 720;
     A.f = Math.max(0.7, Math.min(1, A.W / 1100));
+    A.rx = Math.min(A.W * 0.41, 560); A.ry = A.H * 0.5;
+    A.ang = arcAngles(A.rx, A.ry);
     icons.forEach(ic => {
       ic.px = Math.round(ic.size * A.f);
       if (A.mobile) { ic.el.style.width = ic.el.style.height = ''; ic.el.style.transform = ''; ic.el.style.opacity = ''; }
@@ -947,17 +971,13 @@
   }
   function placeArc(t, still) {
     if (A.mobile) return;
-    const n = icons.length, cx = A.W / 2, cy = A.H * 0.66;
-    const rx = Math.min(A.W * 0.41, 560), ry = A.H * 0.5;
+    const cx = A.W / 2, cy = A.H * 0.66;
     icons.forEach((ic, i) => {
-      const base = 196 - (i / (n - 1)) * 212;                              // 196° → −16°
-      const drift = still ? 0 : Math.sin(t * ic.sp + ic.ph) * 2.2;           // se desliza por el arco
-      const a = (base + drift) * Math.PI / 180;
-      const radial = 1 + (i % 2 ? 0.05 : -0.03) + (still ? 0 : Math.sin(t * ic.sp * 0.8 + ic.ph * 1.3) * 0.012);
-      const bob = still ? 0 : Math.sin(t * ic.sp * 1.6 + ic.ph * 0.7) * 9;   // flotación suave
-      const x = cx + rx * radial * Math.cos(a) - ic.px / 2;
-      const y = cy - ry * radial * Math.sin(a) + bob - ic.px / 2;
-      const p = still ? 1 : clamp01((t - i * 0.07) / 0.8);                   // entrada escalonada
+      const a = A.ang[i];
+      const wave = still ? 0 : Math.sin(t * 0.85 - i * 0.5) * 9;               // ola que recorre el arco
+      const x = cx + A.rx * Math.cos(a) + wave * Math.cos(a) - ic.px / 2;
+      const y = cy - A.ry * Math.sin(a) - wave * Math.sin(a) - ic.px / 2;
+      const p = still ? 1 : clamp01((t - i * 0.06) / 0.8);                       // entrada escalonada
       ic.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${(0.55 + 0.45 * easeOutBack(p)).toFixed(3)})`;
       ic.el.style.opacity = clamp01(p * 1.6).toFixed(2);
     });
