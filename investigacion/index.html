@@ -6,6 +6,11 @@
     <meta name="description" content="Investigación computacional de Marian Barba sobre docking molecular multitarget.">
     <title>Investigación — Marian Barba</title>
     <link rel="icon" type="image/png" href="../img/Memoji.png">
+    <script>
+      /* Evita mostrar la página en español si el idioma guardado es inglés */
+      try { if (localStorage.getItem('mb-lang') === 'en') document.documentElement.classList.add('i18n-pre'); } catch (e) {}
+      addEventListener('load', () => document.documentElement.classList.remove('i18n-pre'));
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -41,6 +46,10 @@
 
       a {
         color: inherit;
+      }
+
+      html.i18n-pre body {
+        visibility: hidden;
       }
 
       .shell {
@@ -115,6 +124,36 @@
         color: #fff;
         text-decoration: none;
         font-size: .88rem;
+      }
+
+      .lang-switch {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .55);
+        border: 1px solid var(--line);
+      }
+
+      .lang-opt {
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font: 500 .72rem var(--mono);
+        letter-spacing: .08em;
+        color: var(--muted);
+        transition: background .2s, color .2s;
+      }
+
+      .lang-opt:hover {
+        color: var(--ink);
+      }
+
+      .lang-opt.active {
+        background: var(--ink);
+        color: #fff;
       }
 
       .menu-btn {
@@ -443,6 +482,10 @@
 
         .menu-btn {
           display: block;
+          margin-left: 0;
+        }
+
+        .lang-switch {
           margin-left: auto;
         }
 
@@ -488,7 +531,9 @@
       @media (prefers-reduced-motion: reduce) {
         .molecule-image,
         .molecule-canvas,
-        .cursor-note {
+        .cursor-note,
+        .lang-switch,
+        .lang-opt {
           transition: none;
         }
       }
@@ -498,16 +543,20 @@
 
     <div class="shell">
       <header class="nav" id="nav">
-        <a href="../index.html" class="mark" aria-label="Inicio">M.B.</a>
-        <nav class="nav-links" id="navLinks" aria-label="Principal">
-          <a href="../index.html#proyectos">Proyectos</a>
-          <a href="index.html">Investigación</a>
-          <a href="../index.html#habilidades">Habilidades</a>
-          <a href="../index.html#experiencia">Experiencia</a>
-          <a href="../index.html#faq">FAQ</a>
+        <a href="../index.html" class="mark" aria-label="Inicio" data-i18n-aria="nav.home">M.B.</a>
+        <nav class="nav-links" id="navLinks" aria-label="Principal" data-i18n-aria="nav.main">
+          <a href="../index.html#proyectos" data-i18n="nav.projects">Proyectos</a>
+          <a href="index.html" data-i18n="nav.research">Investigación</a>
+          <a href="../index.html#habilidades" data-i18n="nav.skills">Habilidades</a>
+          <a href="../index.html#experiencia" data-i18n="nav.experience">Experiencia</a>
+          <a href="../index.html#faq" data-i18n="nav.faq">FAQ</a>
         </nav>
-        <a href="../index.html#contacto" class="btn">Hablemos</a>
-        <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
+        <div class="lang-switch" role="group" aria-label="Idioma" data-i18n-aria="lang.group">
+          <button type="button" class="lang-opt active" data-lang="es" aria-pressed="true">ES</button>
+          <button type="button" class="lang-opt" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <a href="../index.html#contacto" class="btn" data-i18n="nav.talk">Hablemos</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" data-i18n-aria="nav.openMenu">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
             <path d="M4 7h16M4 12h16M4 17h16"/>
           </svg>
@@ -517,48 +566,48 @@
       <main>
         <section class="hero" aria-labelledby="research-title">
           <div>
-            <div class="label eyebrow">Investigación · Docking molecular</div>
-            <h1 id="research-title">La biología también puede ser <em> interactiva.</em></h1>
-            <p class="intro">
+            <div class="label eyebrow" data-i18n="hero.label">Investigación · Docking molecular</div>
+            <h1 id="research-title" data-i18n="hero.title">La biología también puede ser <em> interactiva.</em></h1>
+            <p class="intro" data-i18n="hero.intro">
               Una exploración computacional de compuestos naturales y sus posibles interacciones con dianas asociadas al adenocarcinoma mamario.
             </p>
-            <div class="tags" aria-label="Temas del proyecto">
+            <div class="tags" aria-label="Temas del proyecto" data-i18n-aria="tags.aria">
               <span class="tag">AutoDock Vina</span>
-              <span class="tag">Quercetina</span>
+              <span class="tag" data-i18n="tag.quercetin">Quercetina</span>
               <span class="tag">COX-2</span>
               <span class="tag">In silico</span>
             </div>
           </div>
 
-          <div class="molecule" id="molecule" aria-label="Visualización interactiva de la quercetina en COX-2">
-            <img class="molecule-image" src="assets/quercetina-cox2.webp" alt="Pose de docking de quercetina en la proteína COX-2">
-            <span class="cursor-note">Mueve el cursor sobre la estructura</span>
-            <span class="image-note">Quercetina · COX-2</span>
+          <div class="molecule" id="molecule" aria-label="Visualización interactiva de la quercetina en COX-2" data-i18n-aria="molecule.aria">
+            <img class="molecule-image" src="assets/quercetina-cox2.webp" alt="Pose de docking de quercetina en la proteína COX-2" data-i18n-alt="molecule.alt">
+            <span class="cursor-note" data-i18n="molecule.cursor">Mueve el cursor sobre la estructura</span>
+            <span class="image-note" data-i18n="molecule.note">Quercetina · COX-2</span>
           </div>
         </section>
 
         <section class="section" id="proyecto">
           <div class="section-head">
             <div>
-              <div class="label">Proyecto 01</div>
-              <h2>Una estrategia multiblanco.</h2>
+              <div class="label" data-i18n="p1.label">Proyecto 01</div>
+              <h2 data-i18n="p1.title">Una estrategia multiblanco.</h2>
             </div>
-            <p>
+            <p data-i18n="p1.p">
               Se evaluó el potencial de quercetina, timoquinona y 6-shogaol para interactuar con proteínas asociadas a proliferación, inflamación, angiogénesis, apoptosis y control del ciclo celular.
             </p>
           </div>
 
           <div class="result">
             <div class="result-copy">
-              <div class="label">Hallazgo destacado</div>
-              <h3>Quercetina y COX-2</h3>
-              <p>
+              <div class="label" data-i18n="find.label">Hallazgo destacado</div>
+              <h3 data-i18n="find.title">Quercetina y COX-2</h3>
+              <p data-i18n="find.p">
                 Entre las interacciones evaluadas, la quercetina presentó la afinidad de unión más favorable frente a COX-2. Esta visualización muestra la pose de docking correspondiente.
               </p>
             </div>
             <div class="metric">
               <strong>−7.148</strong>
-              <span>kcal/mol · modo de unión 1</span>
+              <span data-i18n="find.metric">kcal/mol · modo de unión 1</span>
             </div>
           </div>
         </section>
@@ -566,29 +615,29 @@
         <section class="section">
           <div class="section-head">
             <div>
-              <div class="label">Metodología</div>
-              <h2>Del compuesto a la interacción.</h2>
+              <div class="label" data-i18n="method.label">Metodología</div>
+              <h2 data-i18n="method.title">Del compuesto a la interacción.</h2>
             </div>
-            <p>
+            <p data-i18n="method.p">
               Un flujo computacional estructurado para comparar afinidades de unión. Los resultados se interpretan como evidencia preliminar y requieren validación experimental.
             </p>
           </div>
 
           <div class="grid">
             <article class="card">
-              <span class="num">01 / LIGANDOS</span>
-              <h3>Selección</h3>
-              <p>Quercetina, timoquinona y 6-shogaol como metabolitos de origen vegetal.</p>
+              <span class="num" data-i18n="card1.num">01 / LIGANDOS</span>
+              <h3 data-i18n="card1.title">Selección</h3>
+              <p data-i18n="card1.p">Quercetina, timoquinona y 6-shogaol como metabolitos de origen vegetal.</p>
             </article>
             <article class="card">
-              <span class="num">02 / DIANAS</span>
-              <h3>Preparación</h3>
-              <p>Proteínas HER2, ERα, VEGFR2, COX-2, Caspasa-3 y p53.</p>
+              <span class="num" data-i18n="card2.num">02 / DIANAS</span>
+              <h3 data-i18n="card2.title">Preparación</h3>
+              <p data-i18n="card2.p">Proteínas HER2, ERα, VEGFR2, COX-2, Caspasa-3 y p53.</p>
             </article>
             <article class="card">
-              <span class="num">03 / ANÁLISIS</span>
+              <span class="num" data-i18n="card3.num">03 / ANÁLISIS</span>
               <h3>Docking</h3>
-              <p>Simulaciones con AutoDock Vina y comparación de energías de unión.</p>
+              <p data-i18n="card3.p">Simulaciones con AutoDock Vina y comparación de energías de unión.</p>
             </article>
           </div>
         </section>
@@ -596,26 +645,114 @@
         <section class="section">
           <div class="details">
             <article class="detail">
-              <div class="label">Alcance</div>
-              <h3>Una prueba de concepto.</h3>
-              <p>
+              <div class="label" data-i18n="scope.label">Alcance</div>
+              <h3 data-i18n="scope.title">Una prueba de concepto.</h3>
+              <p data-i18n="scope.p">
                 El docking molecular predice posibles interacciones; no demuestra eficacia terapéutica ni sustituye estudios biológicos, farmacocinéticos o clínicos.
               </p>
             </article>
             <article class="detail collab">
-              <div class="label">Colaboración</div>
+              <div class="label" data-i18n="collab.label">Colaboración</div>
               <h3>Gabriel Rivera</h3>
-              <p>Proyecto de investigación computacional en oncología y acoplamiento molecular.</p>
+              <p data-i18n="collab.p">Proyecto de investigación computacional en oncología y acoplamiento molecular.</p>
             </article>
           </div>
         </section>
       </main>
 
-      <footer>© 2026 Marian Barba · Investigación computacional</footer>
+      <footer data-i18n="footer.text">© 2026 Marian Barba · Investigación computacional</footer>
     </div>
 
     <script>
       (() => {
+        /* ---------- Idioma: traducción controlada ES / EN ---------- */
+        const EN = {
+          "doc.title": "Research — Marian Barba",
+          "doc.description": "Marian Barba's computational research on multitarget molecular docking.",
+
+          "nav.home": "Home",
+          "nav.main": "Main",
+          "nav.projects": "Projects",
+          "nav.research": "Research",
+          "nav.skills": "Skills",
+          "nav.experience": "Experience",
+          "nav.faq": "FAQ",
+          "nav.talk": "Let's talk",
+          "nav.openMenu": "Open menu",
+          "lang.group": "Language",
+
+          "hero.label": "Research · Molecular docking",
+          "hero.title": "Biology can be <em>interactive</em> too.",
+          "hero.intro": "A computational exploration of natural compounds and their possible interactions with targets associated with breast adenocarcinoma.",
+          "tags.aria": "Project topics",
+          "tag.quercetin": "Quercetin",
+          "molecule.aria": "Interactive visualization of quercetin in COX-2",
+          "molecule.alt": "Docking pose of quercetin in the COX-2 protein",
+          "molecule.cursor": "Move the cursor over the structure",
+          "molecule.note": "Quercetin · COX-2",
+
+          "p1.label": "Project 01",
+          "p1.title": "A multitarget strategy.",
+          "p1.p": "The potential of quercetin, thymoquinone and 6-shogaol to interact with proteins involved in proliferation, inflammation, angiogenesis, apoptosis and cell-cycle control was evaluated.",
+          "find.label": "Key finding",
+          "find.title": "Quercetin and COX-2",
+          "find.p": "Among the interactions evaluated, quercetin showed the most favorable binding affinity toward COX-2. This visualization shows the corresponding docking pose.",
+          "find.metric": "kcal/mol · binding mode 1",
+
+          "method.label": "Methodology",
+          "method.title": "From compound to interaction.",
+          "method.p": "A structured computational pipeline for comparing binding affinities. Results are interpreted as preliminary evidence and require experimental validation.",
+          "card1.num": "01 / LIGANDS",
+          "card1.title": "Selection",
+          "card1.p": "Quercetin, thymoquinone and 6-shogaol as plant-derived metabolites.",
+          "card2.num": "02 / TARGETS",
+          "card2.title": "Preparation",
+          "card2.p": "HER2, ERα, VEGFR2, COX-2, Caspase-3 and p53 proteins.",
+          "card3.num": "03 / ANALYSIS",
+          "card3.p": "Simulations with AutoDock Vina and comparison of binding energies.",
+
+          "scope.label": "Scope",
+          "scope.title": "A proof of concept.",
+          "scope.p": "Molecular docking predicts possible interactions; it does not demonstrate therapeutic efficacy or replace biological, pharmacokinetic or clinical studies.",
+          "collab.label": "Collaboration",
+          "collab.p": "Computational research project in oncology and molecular docking.",
+
+          "footer.text": "© 2026 Marian Barba · Computational research"
+        };
+
+        /* ---------- Aplicar el idioma (ES por defecto, EN si está guardado) ---------- */
+        const i18nText = [...document.querySelectorAll('[data-i18n]')];
+        const i18nAttrs = [];
+        [['aria', 'aria-label'], ['title', 'title'], ['alt', 'alt'], ['href', 'href']].forEach(([suffix, attr]) => {
+          document.querySelectorAll('[data-i18n-' + suffix + ']').forEach(el => {
+            i18nAttrs.push({ el, attr, key: el.getAttribute('data-i18n-' + suffix), es: el.getAttribute(attr) });
+          });
+        });
+        const esHTML = new Map(i18nText.map(el => [el, el.innerHTML]));
+        const metaDesc = document.querySelector('meta[name="description"]');
+        const esMeta = { title: document.title, description: metaDesc ? metaDesc.getAttribute('content') : '' };
+        const langOpts = [...document.querySelectorAll('.lang-opt')];
+        let LANG = 'es';
+
+        function applyLang(l) {
+          LANG = l;
+          document.documentElement.lang = l;
+          i18nText.forEach(el => { const key = el.dataset.i18n; el.innerHTML = (l === 'en' && EN[key] != null) ? EN[key] : esHTML.get(el); });
+          i18nAttrs.forEach(({ el, attr, key, es }) => el.setAttribute(attr, (l === 'en' && EN[key] != null) ? EN[key] : es));
+          document.title = l === 'en' ? EN['doc.title'] : esMeta.title;
+          if (metaDesc) metaDesc.setAttribute('content', l === 'en' ? EN['doc.description'] : esMeta.description);
+          langOpts.forEach(btn => { const on = btn.dataset.lang === l; btn.classList.toggle('active', on); btn.setAttribute('aria-pressed', String(on)); });
+          document.documentElement.classList.remove('i18n-pre');
+          document.dispatchEvent(new CustomEvent('mb:lang', { detail: { lang: l } }));
+          try { localStorage.setItem('mb-lang', l); } catch (e) {}
+        }
+
+        langOpts.forEach(btn => btn.addEventListener('click', () => { if (btn.dataset.lang !== LANG) applyLang(btn.dataset.lang); }));
+        let savedLang = 'es';
+        try { savedLang = localStorage.getItem('mb-lang') === 'en' ? 'en' : 'es'; } catch (e) {}
+        if (savedLang === 'en') applyLang('en'); else document.documentElement.classList.remove('i18n-pre');
+
+        /* ---------- Nav ---------- */
         const nav = document.getElementById('nav');
         const navLinks = document.getElementById('navLinks');
         const menuBtn = document.getElementById('menuBtn');

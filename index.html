@@ -6,6 +6,11 @@
 <title>Marian Barba — Desarrolladora Full-Stack</title>
 <meta name="description" content="Portafolio de Marian Barba, desarrolladora full-stack en Panamá. React, Angular, PHP/Laravel, .NET y Node: sistemas web completos y código limpio.">
 <link rel="icon" type="image/png" href="img/Memoji.png">
+<script>
+  /* Evita mostrar la página en español si el idioma guardado es inglés */
+  try { if (localStorage.getItem('mb-lang') === 'en') document.documentElement.classList.add('i18n-pre'); } catch (e) {}
+  addEventListener('load', () => document.documentElement.classList.remove('i18n-pre'));
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -34,6 +39,7 @@
     font-family:var(--sans); font-size:16px; line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
+  html.i18n-pre body{ visibility:hidden; }
   img{ max-width:100%; display:block; }
   a{ color:inherit; }
   h1,h2,h3{ font-family:var(--serif); font-weight:400; margin:0; line-height:1.04; letter-spacing:-0.01em; }
@@ -78,6 +84,23 @@
   .nav-links a:hover{ opacity:.7; }
   .nav.scrolled .nav-links a{ color:var(--ink); }
   .nav .btn{ padding:11px 22px; font-size:.88rem; }
+  .lang-switch{
+    display:inline-flex; align-items:center; padding:3px; border-radius:999px;
+    background:rgba(255,255,255,.28); border:1px solid rgba(255,255,255,.6);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    transition:background .25s ease, border-color .25s ease;
+  }
+  .lang-opt{
+    border:0; background:transparent; cursor:pointer; padding:6px 12px; border-radius:999px;
+    font-family:var(--mono); font-size:.72rem; font-weight:500; letter-spacing:.08em;
+    color:rgba(255,255,255,.85); transition:background .2s ease, color .2s ease;
+  }
+  .lang-opt:hover{ color:#fff; }
+  .lang-opt.active{ background:var(--ink); color:#fff; }
+  .nav.scrolled .lang-switch{ background:rgba(0,0,0,.035); border-color:rgba(0,0,0,.08); }
+  .nav.scrolled .lang-opt{ color:var(--ink-soft); }
+  .nav.scrolled .lang-opt:hover{ color:var(--ink); }
+  .nav.scrolled .lang-opt.active{ background:var(--ink); color:#fff; }
   .menu-btn{ display:none; background:none; border:0; padding:6px; cursor:pointer; color:#fff; }
   .nav.scrolled .menu-btn{ color:var(--ink); }
   .menu-btn svg{ width:22px; height:22px; }
@@ -92,7 +115,8 @@
     .nav-links.open{ opacity:1; pointer-events:auto; transform:none; }
     .nav-links a{ color:var(--ink) !important; padding:12px 14px; border-radius:14px; }
     .nav-links a:hover{ background:var(--paper); opacity:1; }
-    .menu-btn{ display:block; margin-left:auto; }
+    .menu-btn{ display:block; margin-left:0; }
+    .lang-switch{ margin-left:auto; }
     .nav > .btn{ display:none; }
   }
 
@@ -261,14 +285,14 @@
   .b-front{ grid-column:1 / 3; grid-row:1 / 3; background:var(--peach); border-color:transparent; }
   .b-test{ grid-column:3 / 5; grid-row:1; }
   .b-devops{ grid-column:3 / 5; grid-row:2; }
-  .b-back{ grid-column:5 / 7; grid-row:1 / 3; background:#0d0d0d; color:#fff; border-color:#0d0d0d; }
+  .b-back{ grid-column:5 / 7; grid-row:1 / 3; background:#242424; color:#fff; border-color:#0d0d0d; }
   .b-tools{ grid-column:1 / 4; grid-row:3; }
   .b-method{ grid-column:4 / 7; grid-row:3; }
   .cat{
     align-self:flex-start; padding:6px 12px; border-radius:999px; background:rgba(0,0,0,.07);
     font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600; margin-bottom:18px;
   }
-  .b-back .cat{ background:rgba(255,255,255,.12); color:#e9e9e4; }
+  .b-back .cat{ background:rgba(107, 99, 99, 0.12); color:#e9e9e4; }
   .bcard h3{ font-size:1.9rem; margin-bottom:14px; }
   .bcard ul{ margin:16px 0 0; padding:0; list-style:none; display:grid; gap:9px; }
   .bcard li{ font-size:.9rem; color:var(--ink-soft); padding-left:18px; position:relative; line-height:1.45; }
@@ -405,16 +429,20 @@
 
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
-  <a href="#top" class="mark" aria-label="Inicio">M.B.</a>
-  <nav class="nav-links" id="navLinks" aria-label="Principal">
-    <a href="#proyectos">Proyectos</a>
-    <a href="investigacion/index.html">Investigación</a>
-    <a href="#habilidades">Habilidades</a>
-    <a href="#experiencia">Experiencia</a>
-    <a href="#faq">FAQ</a>
+  <a href="#top" class="mark" aria-label="Inicio" data-i18n-aria="nav.home">M.B.</a>
+  <nav class="nav-links" id="navLinks" aria-label="Principal" data-i18n-aria="nav.main">
+    <a href="#proyectos" data-i18n="nav.projects">Proyectos</a>
+    <a href="investigacion/index.html" data-i18n="nav.research">Investigación</a>
+    <a href="#habilidades" data-i18n="nav.skills">Habilidades</a>
+    <a href="#experiencia" data-i18n="nav.experience">Experiencia</a>
+    <a href="#faq" data-i18n="nav.faq">FAQ</a>
   </nav>
-  <a href="#contacto" class="btn btn-dark" data-wave>Hablemos</a>
-  <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
+  <div class="lang-switch" role="group" aria-label="Idioma" data-i18n-aria="lang.group">
+    <button type="button" class="lang-opt active" data-lang="es" aria-pressed="true">ES</button>
+    <button type="button" class="lang-opt" data-lang="en" aria-pressed="false">EN</button>
+  </div>
+  <a href="#contacto" class="btn btn-dark" data-wave data-i18n="nav.talk">Hablemos</a>
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" data-i18n-aria="nav.openMenu">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
   </button>
 </header>
@@ -426,15 +454,15 @@
   <div class="cloud-layer far" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c3"></div></div>
   <div class="cloud-layer near" aria-hidden="true"><div class="cloud c2"></div><div class="cloud c4"></div></div>
 
-  <div class="eyebrow-serif">Desarrolladora de software / Full-Stack</div>
-  <h1>Construyendo experiencias web <em>modernas</em> y elegantes</h1>
-  <p class="sub">Transformo ideas complejas en interfaces limpias, interactivas y centradas en el usuario.</p>
+  <div class="eyebrow-serif" data-i18n="hero.eyebrow">Desarrolladora de software / Full-Stack</div>
+  <h1 data-i18n="hero.title">Construyendo experiencias web <em>modernas</em> y elegantes</h1>
+  <p class="sub" data-i18n="hero.sub">Transformo ideas complejas en interfaces limpias, interactivas y centradas en el usuario.</p>
   <div class="hero-cta">
     <a href="#proyectos" class="btn btn-dark" data-wave>
-      Ver proyectos
+      <span data-i18n="hero.ctaProjects">Ver proyectos</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </a>
-    <a href="assets/Marian-Barba-CV.pdf" class="btn btn-glass" download data-wave>Descargar CV</a>
+    <a href="assets/Marian-Barba-CV.pdf" class="btn btn-glass" download data-wave data-i18n="hero.ctaCV" data-i18n-href="hero.cvHref">Descargar CV</a>
   </div>
 
   <div class="memoji-stage" id="memojiStage" data-pose="front" aria-hidden="true">
@@ -455,22 +483,22 @@
 <section class="section about" id="sobre-mi">
   <div class="wrap about-grid">
     <div class="reveal">
-      <span class="pill">Sobre mí</span>
-      <h2>Enfoque en código limpio, rendimiento y detalle visual</h2>
-      <p class="lede">
+      <span class="pill" data-i18n="about.pill">Sobre mí</span>
+      <h2 data-i18n="about.title">Enfoque en código limpio, rendimiento y detalle visual</h2>
+      <p class="lede" data-i18n="about.lede">
         Me gusta entender el problema del negocio antes de elegir la tecnología. Trabajo con React y
         Angular en el frontend, y con PHP/Laravel, .NET, Node.js y Java en el backend. He llevado sistemas
         completos del requerimiento al despliegue: base de datos, backend, interfaz y pruebas, tanto para
         clientes reales como en equipos con procesos ágiles.
       </p>
       <div class="carousel-ctrl">
-        <button class="arrow-btn" id="prevSlide" aria-label="Anterior">
+        <button class="arrow-btn" id="prevSlide" aria-label="Anterior" data-i18n-aria="about.prev">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
         </button>
-        <button class="arrow-btn" id="nextSlide" aria-label="Siguiente">
+        <button class="arrow-btn" id="nextSlide" aria-label="Siguiente" data-i18n-aria="about.next">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
-        <div class="dots" id="dots" role="tablist" aria-label="Diapositivas"></div>
+        <div class="dots" id="dots" role="tablist" aria-label="Diapositivas" data-i18n-aria="about.slides"></div>
       </div>
     </div>
 
@@ -489,13 +517,13 @@
   );
 }</pre>
           </div>
-          <div class="slide-caption"><strong>Componentes de UI</strong><span>Tipados y reutilizables</span></div>
+          <div class="slide-caption"><strong data-i18n="about.s1.title">Componentes de UI</strong><span data-i18n="about.s1.note">Tipados y reutilizables</span></div>
         </div>
 
         <div class="slide">
           <div class="editor">
-            <div class="editor-bar"><i></i><i></i><i></i><span>estructura-capas.txt</span></div>
-<pre><span class="c">// Cada capa con una sola responsabilidad</span>
+            <div class="editor-bar"><i></i><i></i><i></i><span data-i18n="about.s2.file">estructura-capas.txt</span></div>
+<pre data-i18n="about.s2.code"><span class="c">// Cada capa con una sola responsabilidad</span>
 <span class="f">modelo/</span>        <span class="c">→ datos (JavaBeans / tipos)</span>
 <span class="f">dao/</span>           <span class="c">→ acceso a la base de datos</span>
 <span class="f">controlador/</span>   <span class="c">→ recibe la petición HTTP</span>
@@ -504,7 +532,7 @@
 <span class="c">// El controlador nunca escribe SQL:</span>
 <span class="k">const</span> cliente = <span class="k">await</span> clienteDAO.<span class="f">buscarPorCorreo</span>(correo);</pre>
           </div>
-          <div class="slide-caption"><strong>Arquitectura limpia</strong><span>Separación por capas</span></div>
+          <div class="slide-caption"><strong data-i18n="about.s2.title">Arquitectura limpia</strong><span data-i18n="about.s2.note">Separación por capas</span></div>
         </div>
 
         <div class="slide">
@@ -520,7 +548,7 @@
   <span class="f">.nav-links</span> { <span class="k">flex-direction</span>: column; }
 }</pre>
           </div>
-          <div class="slide-caption"><strong>Diseño responsive</strong><span>De móvil a escritorio</span></div>
+          <div class="slide-caption"><strong data-i18n="about.s3.title">Diseño responsive</strong><span data-i18n="about.s3.note">De móvil a escritorio</span></div>
         </div>
       </div>
     </div>
@@ -532,9 +560,9 @@
   <div class="wrap">
     <div class="arc" id="arc">
       <div class="arc-center reveal">
-        <span class="pill">Ecosistema &amp; herramientas</span>
-        <h2>Integración &amp; entornos</h2>
-        <p>Del editor al servidor en producción: las herramientas con las que construyo, pruebo y despliego mis proyectos.</p>
+        <span class="pill" data-i18n="eco.pill">Ecosistema &amp; herramientas</span>
+        <h2 data-i18n="eco.title">Integración &amp; entornos</h2>
+        <p data-i18n="eco.p">Del editor al servidor en producción: las herramientas con las que construyo, pruebo y despliego mis proyectos.</p>
       </div>
     </div>
   </div>
@@ -545,20 +573,20 @@
   <div class="wrap">
     <div class="stack-head">
       <div class="reveal">
-        <span class="pill">Mi stack</span>
-        <h2>Tecnologías y frameworks</h2>
-        <p>Un stack amplio, elegido según el problema: React o Angular en el frontend; Laravel, .NET, Node o Java en el backend; y bases de datos relacionales por debajo.</p>
+        <span class="pill" data-i18n="stack.pill">Mi stack</span>
+        <h2 data-i18n="stack.title">Tecnologías y frameworks</h2>
+        <p data-i18n="stack.p">Un stack amplio, elegido según el problema: React o Angular en el frontend; Laravel, .NET, Node o Java en el backend; y bases de datos relacionales por debajo.</p>
       </div>
       <div class="mini-cards reveal">
-        <div class="mini"><small>Frontend &amp; UI</small><p>React y Angular: interfaces tipadas, accesibles y responsivas.</p></div>
-        <div class="mini"><small>Backend &amp; datos</small><p>PHP/Laravel, .NET, Node y Java: APIs, autenticación y modelado relacional.</p></div>
+        <div class="mini"><small>Frontend &amp; UI</small><p data-i18n="stack.mini1">React y Angular: interfaces tipadas, accesibles y responsivas.</p></div>
+        <div class="mini"><small data-i18n="stack.mini2.label">Backend &amp; datos</small><p data-i18n="stack.mini2">PHP/Laravel, .NET, Node y Java: APIs, autenticación y modelado relacional.</p></div>
       </div>
     </div>
 
     <div class="bento">
       <article class="bcard b-front reveal">
         <span class="cat">Frontend stack</span>
-        <h3>Interfaces que se sienten bien</h3>
+        <h3 data-i18n="stack.front.title">Interfaces que se sienten bien</h3>
         <div class="logos" id="frontLogos">
           <div class="logo active" data-s="react" title="React"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React" loading="lazy"></div>
           <div class="logo" data-s="ng" title="Angular"><img src="https://cdn.simpleicons.org/angular/DD0031" alt="Angular" loading="lazy"></div>
@@ -571,8 +599,8 @@
         </div>
         <div class="snippet" id="snippet"><small>React</small><span id="snippetCode"></span></div>
         <ul>
-          <li>React y Angular con TypeScript; React en Helios y Villas Doña Olga</li>
-          <li>Tailwind CSS y shadcn/ui para sistemas de diseño consistentes</li>
+          <li data-i18n="stack.front.li1">React y Angular con TypeScript; React en Helios y Villas Doña Olga</li>
+          <li data-i18n="stack.front.li2">Tailwind CSS y shadcn/ui para sistemas de diseño consistentes</li>
         </ul>
       </article>
 
@@ -585,13 +613,13 @@
           <div class="logo" title="ISTQB" style="font-size:.7rem">ISTQB</div>
         </div>
         <ul>
-          <li>Pruebas por módulo con criterios ISTQB (Helios)</li>
-          <li>Vitest + React Testing Library y análisis con SonarQube</li>
+          <li data-i18n="stack.test.li1">Pruebas por módulo con criterios ISTQB (Helios)</li>
+          <li data-i18n="stack.test.li2">Vitest + React Testing Library y análisis con SonarQube</li>
         </ul>
       </article>
 
       <article class="bcard b-devops reveal">
-        <span class="cat">DevOps &amp; infraestructura</span>
+        <span class="cat" data-i18n="stack.devops.cat">DevOps &amp; infraestructura</span>
         <div class="logos">
           <div class="logo" title="Git"><img src="https://cdn.simpleicons.org/git/F05032" alt="Git" loading="lazy"></div>
           <div class="logo" title="GitHub"><img src="https://cdn.simpleicons.org/github/181717" alt="GitHub" loading="lazy"></div>
@@ -601,14 +629,14 @@
           <div class="logo" title="Vercel"><img src="https://cdn.simpleicons.org/vercel/000000" alt="Vercel" loading="lazy"></div>
         </div>
         <ul>
-          <li>Despliegues en Railway y Netlify, CI/CD en equipo</li>
-          <li>Supabase: PostgreSQL, Auth y Realtime</li>
+          <li data-i18n="stack.devops.li1">Despliegues en Railway y Netlify, CI/CD en equipo</li>
+          <li data-i18n="stack.devops.li2">Supabase: PostgreSQL, Auth y Realtime</li>
         </ul>
       </article>
 
       <article class="bcard b-back reveal">
-        <span class="cat">Backend &amp; bases de datos</span>
-        <h3>Lógica sólida, datos bien modelados</h3>
+        <span class="cat" data-i18n="stack.back.cat">Backend &amp; bases de datos</span>
+        <h3 data-i18n="stack.back.title">Lógica sólida, datos bien modelados</h3>
         <div class="logos">
           <div class="logo" title="Laravel"><img src="https://cdn.simpleicons.org/laravel/FF2D20" alt="Laravel" loading="lazy"></div>
           <div class="logo" title="PHP"><img src="https://cdn.simpleicons.org/php/8892BF" alt="PHP" loading="lazy"></div>
@@ -621,30 +649,30 @@
         </div>
         <div class="arch"><span>REST API</span><span>MVC · Laravel / .NET</span><span>DAO / JDBC</span><span>ORM · Drizzle</span><span>Auth · bcrypt</span></div>
         <ul>
-          <li>PHP con Laravel y C# / .NET para APIs y aplicaciones web</li>
-          <li>Java (Servlets/JSP) + MySQL en La Casa de Mandi</li>
-          <li>Node.js + Express + Drizzle ORM en Evac Shipping</li>
-          <li>Validación de datos con Zod y rutas protegidas</li>
+          <li data-i18n="stack.back.li1">PHP con Laravel y C# / .NET para APIs y aplicaciones web</li>
+          <li data-i18n="stack.back.li2">Java (Servlets/JSP) + MySQL en La Casa de Mandi</li>
+          <li data-i18n="stack.back.li3">Node.js + Express + Drizzle ORM en Evac Shipping</li>
+          <li data-i18n="stack.back.li4">Validación de datos con Zod y rutas protegidas</li>
         </ul>
       </article>
 
       <article class="bcard b-tools reveal">
-        <span class="cat">Herramientas &amp; flujo de trabajo</span>
+        <span class="cat" data-i18n="stack.tools.cat">Herramientas &amp; flujo de trabajo</span>
         <div class="logos">
           <div class="logo" title="Figma"><img src="https://cdn.simpleicons.org/figma/F24E1E" alt="Figma" loading="lazy"></div>
           <div class="logo" title="VS Code"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="VS Code" loading="lazy"></div>
           <div class="logo" title="Debian"><img src="https://cdn.simpleicons.org/debian/A81D33" alt="Debian" loading="lazy"></div>
           <div class="logo" title="Postman"><img src="https://cdn.simpleicons.org/postman/FF6C37" alt="Postman" loading="lazy"></div>
         </div>
-        <ul><li>Del prototipo en Figma al endpoint probado en Postman, trabajando en Linux</li></ul>
+        <ul><li data-i18n="stack.tools.li1">Del prototipo en Figma al endpoint probado en Postman, trabajando en Linux</li></ul>
       </article>
 
       <article class="bcard b-method reveal">
-        <span class="cat">Metodologías</span>
+        <span class="cat" data-i18n="stack.method.cat">Metodologías</span>
         <div class="chips" style="margin-top:2px;">
           <span class="chip">Agile / Scrum</span><span class="chip">CI/CD</span><span class="chip">Clean Code</span><span class="chip">ISTQB</span>
         </div>
-        <ul><li>Scrum Master en Helios: sprints, dailys y entregas con métricas de calidad</li></ul>
+        <ul><li data-i18n="stack.method.li1">Scrum Master en Helios: sprints, dailys y entregas con métricas de calidad</li></ul>
       </article>
     </div>
   </div>
@@ -654,91 +682,91 @@
 <section class="section projects" id="proyectos">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="pill">Portafolio</span>
-      <h2>Trabajo destacado</h2>
-      <p>Cinco sistemas, cinco problemas distintos. Cada uno con su stack, su cliente y su estado real de entrega.</p>
+      <span class="pill" data-i18n="projects.pill">Portafolio</span>
+      <h2 data-i18n="projects.title">Trabajo destacado</h2>
+      <p data-i18n="projects.p">Cinco sistemas, cinco problemas distintos. Cada uno con su stack, su cliente y su estado real de entrega.</p>
     </div>
 
     <div class="proj-grid">
       <article class="proj reveal">
         <div class="proj-visual v1">
-          <span class="status">En línea</span>
+          <span class="status" data-i18n="p1.status">En línea</span>
           <h3>Helios</h3>
-          <div class="kicker">Sistema de citas médicas para una red de policlínicas</div>
+          <div class="kicker" data-i18n="p1.kicker">Sistema de citas médicas para una red de policlínicas</div>
         </div>
         <div class="proj-body">
-          <div class="meta"><span><b>Rol</b> Scrum Master / DevOps</span><span><b>Equipo</b> 5 personas</span><span><b>Año</b> 2026</span></div>
-          <p>Plataforma que unifica el agendamiento, la cancelación y reprogramación, la sincronización entre sedes y los recordatorios de citas. React + TypeScript sobre Supabase (PostgreSQL, Auth y Realtime), pruebas por módulo con Vitest y despliegue continuo en Railway.</p>
+          <div class="meta"><span><b data-i18n="meta.role">Rol</b> Scrum Master / DevOps</span><span><b data-i18n="meta.team">Equipo</b> <span data-i18n="p1.team">5 personas</span></span><span><b data-i18n="meta.year">Año</b> 2026</span></div>
+          <p data-i18n="p1.desc">Plataforma que unifica el agendamiento, la cancelación y reprogramación, la sincronización entre sedes y los recordatorios de citas. React + TypeScript sobre Supabase (PostgreSQL, Auth y Realtime), pruebas por módulo con Vitest y despliegue continuo en Railway.</p>
           <div class="chips"><span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Supabase</span><span class="chip">PostgreSQL</span><span class="chip">Vitest</span><span class="chip">Railway</span></div>
           <div class="plinks">
-            <a href="https://github.com/Helios-TeamUTP/Helios" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>Código</a>
-            <a href="https://helios-web-production.up.railway.app/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>Demo en vivo</a>
+            <a href="https://github.com/Helios-TeamUTP/Helios" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg><span data-i18n="link.code">Código</span></a>
+            <a href="https://helios-web-production.up.railway.app/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg><span data-i18n="link.demo">Demo en vivo</span></a>
           </div>
         </div>
       </article>
 
       <article class="proj reveal">
         <div class="proj-visual v2">
-          <span class="status delivered">Entregado</span>
+          <span class="status delivered" data-i18n="p2.status">Entregado</span>
           <h3>La Casa de Mandi</h3>
-          <div class="kicker">Plataforma de pedidos personalizados para una pastelería</div>
+          <div class="kicker" data-i18n="p2.kicker">Plataforma de pedidos personalizados para una pastelería</div>
         </div>
         <div class="proj-body">
-          <div class="meta"><span><b>Rol</b> Desarrolladora única</span><span><b>Cliente</b> Pastelería artesanal</span><span><b>Despliegue</b> Tomcat local</span></div>
-          <p>Reemplaza el flujo manual por WhatsApp, Excel y Yappy: catálogo, pedido con diseño a medida, abono y pago verificados, producción y entrega, con panel de administración y control de capacidad diaria.</p>
+          <div class="meta"><span><b data-i18n="meta.role">Rol</b> <span data-i18n="meta.soleDev">Desarrolladora única</span></span><span><b data-i18n="meta.client">Cliente</b> <span data-i18n="p2.client">Pastelería artesanal</span></span><span><b data-i18n="meta.deploy">Despliegue</b> <span data-i18n="p2.deploy">Tomcat local</span></span></div>
+          <p data-i18n="p2.desc">Reemplaza el flujo manual por WhatsApp, Excel y Yappy: catálogo, pedido con diseño a medida, abono y pago verificados, producción y entrega, con panel de administración y control de capacidad diaria.</p>
           <div class="chips"><span class="chip">Java</span><span class="chip">Servlets / JSP</span><span class="chip">Apache Tomcat</span><span class="chip">MySQL</span><span class="chip">JDBC</span></div>
           <div class="plinks">
-            <a href="https://github.com/MarianC-programing/lacasademandi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>Código</a>
+            <a href="https://github.com/MarianC-programing/lacasademandi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg><span data-i18n="link.code">Código</span></a>
           </div>
         </div>
       </article>
 
       <article class="proj reveal">
         <div class="proj-visual v3">
-          <span class="status">En producción</span>
+          <span class="status" data-i18n="p3.status">En producción</span>
           <h3>Villas Doña Olga</h3>
-          <div class="kicker">Comercialización de lotes residenciales</div>
+          <div class="kicker" data-i18n="p3.kicker">Comercialización de lotes residenciales</div>
         </div>
         <div class="proj-body">
-          <div class="meta"><span><b>Rol</b> Desarrolladora única</span><span><b>Cliente</b> Proyecto familiar</span><span><b>Despliegue</b> Netlify</span></div>
-          <p>Sitio para consultar la disponibilidad de más de 50 lotes, conocer el plan de financiamiento directo, ver el avance del proyecto y contactar al vendedor por WhatsApp o correo.</p>
+          <div class="meta"><span><b data-i18n="meta.role">Rol</b> <span data-i18n="meta.soleDev">Desarrolladora única</span></span><span><b data-i18n="meta.client">Cliente</b> <span data-i18n="p3.client">Proyecto familiar</span></span><span><b data-i18n="meta.deploy">Despliegue</b> Netlify</span></div>
+          <p data-i18n="p3.desc">Sitio para consultar la disponibilidad de más de 50 lotes, conocer el plan de financiamiento directo, ver el avance del proyecto y contactar al vendedor por WhatsApp o correo.</p>
           <div class="chips"><span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Vite</span><span class="chip">Tailwind CSS</span><span class="chip">shadcn/ui</span><span class="chip">Netlify</span></div>
           <div class="plinks">
-            <a href="https://github.com/MarianC-programing/villas_do-a_olga" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>Código</a>
-            <a href="https://villasolgapam.netlify.app/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>Demo en vivo</a>
+            <a href="https://github.com/MarianC-programing/villas_do-a_olga" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg><span data-i18n="link.code">Código</span></a>
+            <a href="https://villasolgapam.netlify.app/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg><span data-i18n="link.demo">Demo en vivo</span></a>
           </div>
         </div>
       </article>
 
       <article class="proj reveal">
         <div class="proj-visual v4">
-          <span class="status delivered">Completado</span>
+          <span class="status delivered" data-i18n="p4.status">Completado</span>
           <h3>Evac Shipping</h3>
-          <div class="kicker">Gestión de envíos de EE. UU. a Panamá</div>
+          <div class="kicker" data-i18n="p4.kicker">Gestión de envíos de EE. UU. a Panamá</div>
         </div>
         <div class="proj-body">
-          <div class="meta"><span><b>Rol</b> Desarrolladora única</span><span><b>Tipo</b> Plataforma full-stack</span></div>
-          <p>Registro de usuarios, rastreo de paquetes por peso y estado, y panel de administración con CRUD de envíos y mensajes de soporte. Acceso administrativo con doble verificación y API REST validada con Zod.</p>
+          <div class="meta"><span><b data-i18n="meta.role">Rol</b> <span data-i18n="meta.soleDev">Desarrolladora única</span></span><span><b data-i18n="meta.type">Tipo</b> <span data-i18n="p4.type">Plataforma full-stack</span></span></div>
+          <p data-i18n="p4.desc">Registro de usuarios, rastreo de paquetes por peso y estado, y panel de administración con CRUD de envíos y mensajes de soporte. Acceso administrativo con doble verificación y API REST validada con Zod.</p>
           <div class="chips"><span class="chip">React</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">SQLite</span><span class="chip">Drizzle ORM</span><span class="chip">Zod</span><span class="chip">bcrypt</span></div>
           <div class="plinks">
-            <a href="https://github.com/MarianC-programing/Evac-Shipping" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>Código</a>
+            <a href="https://github.com/MarianC-programing/Evac-Shipping" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg><span data-i18n="link.code">Código</span></a>
           </div>
         </div>
       </article>
 
       <article class="proj reveal" style="grid-column:1 / -1;">
         <div class="proj-visual v5" style="height:170px;">
-          <span class="status dev">En desarrollo</span>
+          <span class="status dev" data-i18n="p5.status">En desarrollo</span>
           <h3>HorariosWeb · Cruza Horarios</h3>
-          <div class="kicker">Combinaciones de horario sin choques</div>
+          <div class="kicker" data-i18n="p5.kicker">Combinaciones de horario sin choques</div>
         </div>
         <div class="proj-body">
-          <div class="meta"><span><b>Rol</b> Desarrolladora única</span><span><b>Tipo</b> Herramienta web</span><span><b>Despliegue</b> GitHub Pages · sin backend</span></div>
-          <p>Lee el horario oficial (PDF o imagen, con OCR tolerante a errores), permite revisar lo detectado y genera todas las combinaciones de secciones sin choques según las materias y el turno preferido. Todo se procesa en el navegador: no hay servidor ni base de datos.</p>
+          <div class="meta"><span><b data-i18n="meta.role">Rol</b> <span data-i18n="meta.soleDev">Desarrolladora única</span></span><span><b data-i18n="meta.type">Tipo</b> <span data-i18n="p5.type">Herramienta web</span></span><span><b data-i18n="meta.deploy">Despliegue</b> <span data-i18n="p5.deploy">GitHub Pages · sin backend</span></span></div>
+          <p data-i18n="p5.desc">Lee el horario oficial (PDF o imagen, con OCR tolerante a errores), permite revisar lo detectado y genera todas las combinaciones de secciones sin choques según las materias y el turno preferido. Todo se procesa en el navegador: no hay servidor ni base de datos.</p>
           <div class="chips"><span class="chip">JavaScript</span><span class="chip">OCR</span><span class="chip">Lectura de PDF</span><span class="chip">LocalStorage</span><span class="chip">GitHub Pages</span></div>
           <div class="plinks">
-            <a href="https://github.com/MarianC-programing/HorarioWeb" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg>Código</a>
-            <a href="https://marianc-programing.github.io/HorarioWeb/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>Demo en vivo</a>
+            <a href="https://github.com/MarianC-programing/HorarioWeb" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10Z"/></svg><span data-i18n="link.code">Código</span></a>
+            <a href="https://marianc-programing.github.io/HorarioWeb/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg><span data-i18n="link.demo">Demo en vivo</span></a>
           </div>
         </div>
       </article>
@@ -750,30 +778,30 @@
 <section class="section" id="experiencia">
   <div class="wrap exp-grid">
     <div class="section-head reveal">
-      <span class="pill">Experiencia</span>
-      <h2>Dónde he puesto en práctica lo que sé</h2>
-      <p>Proyectos con clientes reales, trabajo en equipo con procesos ágiles y productos propios de principio a fin.</p>
+      <span class="pill" data-i18n="exp.pill">Experiencia</span>
+      <h2 data-i18n="exp.title">Dónde he puesto en práctica lo que sé</h2>
+      <p data-i18n="exp.p">Proyectos con clientes reales, trabajo en equipo con procesos ágiles y productos propios de principio a fin.</p>
     </div>
     <div class="timeline">
       <div class="t-item reveal">
         <div class="t-when">2026</div>
         <div>
           <h3>Scrum Master / DevOps · Helios</h3>
-          <p>Equipo de 5. Sprints, dailys, CI/CD y despliegue en Railway de un sistema de citas médicas, con pruebas por módulo.</p>
+          <p data-i18n="exp.li1.p">Equipo de 5. Sprints, dailys, CI/CD y despliegue en Railway de un sistema de citas médicas, con pruebas por módulo.</p>
         </div>
       </div>
       <div class="t-item reveal">
-        <div class="t-when">Proyectos con clientes</div>
+        <div class="t-when" data-i18n="exp.whenClients">Proyectos con clientes</div>
         <div>
-          <h3>Desarrolladora full-stack</h3>
-          <p>La Casa de Mandi (pastelería) y Villas Doña Olga (venta de lotes): desde la propuesta y el diseño hasta el backend, la interfaz y el despliegue.</p>
+          <h3 data-i18n="exp.role">Desarrolladora full-stack</h3>
+          <p data-i18n="exp.li2.p">La Casa de Mandi (pastelería) y Villas Doña Olga (venta de lotes): desde la propuesta y el diseño hasta el backend, la interfaz y el despliegue.</p>
         </div>
       </div>
       <div class="t-item reveal">
-        <div class="t-when">Productos propios</div>
+        <div class="t-when" data-i18n="exp.whenOwn">Productos propios</div>
         <div>
-          <h3>Desarrolladora full-stack</h3>
-          <p>Evac Shipping y HorariosWeb: productos completos construidos de principio a fin, del modelado de datos al despliegue.</p>
+          <h3 data-i18n="exp.role">Desarrolladora full-stack</h3>
+          <p data-i18n="exp.li3.p">Evac Shipping y HorariosWeb: productos completos construidos de principio a fin, del modelado de datos al despliegue.</p>
         </div>
       </div>
     </div>
@@ -785,30 +813,30 @@
   <div class="wrap faq-wide">
     <div class="faq-side reveal">
       <span class="pill">FAQ</span>
-      <h2>Preguntas frecuentes</h2>
-      <p>¿No ves tu pregunta? Escríbeme y te respondo.</p>
-      <a href="#contacto" class="btn btn-dark">Contactar</a>
+      <h2 data-i18n="faq.title">Preguntas frecuentes</h2>
+      <p data-i18n="faq.p">¿No ves tu pregunta? Escríbeme y te respondo.</p>
+      <a href="#contacto" class="btn btn-dark" data-i18n="faq.cta">Contactar</a>
     </div>
     <div class="faq-wrap reveal">
       <details>
-        <summary>¿Con qué tecnologías trabajas?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-        <p>En frontend, React y Angular con TypeScript y Tailwind CSS. En backend, PHP con Laravel, C# / .NET, Node.js con Express y Java con Servlets/JSP. En datos, PostgreSQL (vía Supabase), MySQL, SQLite y Oracle.</p>
+        <summary><span data-i18n="faq.q1">¿Con qué tecnologías trabajas?</span><span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+        <p data-i18n="faq.a1">En frontend, React y Angular con TypeScript y Tailwind CSS. En backend, PHP con Laravel, C# / .NET, Node.js con Express y Java con Servlets/JSP. En datos, PostgreSQL (vía Supabase), MySQL, SQLite y Oracle.</p>
       </details>
       <details>
-        <summary>¿Haces solo frontend o también backend?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-        <p>Ambos. Trabajo el ciclo completo: levantamiento del requerimiento, diseño de la base de datos, backend, interfaz, pruebas y despliegue.</p>
+        <summary><span data-i18n="faq.q2">¿Haces solo frontend o también backend?</span><span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+        <p data-i18n="faq.a2">Ambos. Trabajo el ciclo completo: levantamiento del requerimiento, diseño de la base de datos, backend, interfaz, pruebas y despliegue.</p>
       </details>
       <details>
-        <summary>¿Has trabajado con clientes reales?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-        <p>Sí. La Casa de Mandi digitalizó los pedidos de una pastelería artesanal y Villas Doña Olga es el sitio de venta de un proyecto de lotes residenciales.</p>
+        <summary><span data-i18n="faq.q3">¿Has trabajado con clientes reales?</span><span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+        <p data-i18n="faq.a3">Sí. La Casa de Mandi digitalizó los pedidos de una pastelería artesanal y Villas Doña Olga es el sitio de venta de un proyecto de lotes residenciales.</p>
       </details>
       <details>
-        <summary>¿Dónde se despliegan tus proyectos?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-        <p>Depende del proyecto: Netlify y GitHub Pages para sitios estáticos, Railway para aplicaciones con backend y base de datos, y servidores locales como Tomcat cuando el cliente lo requiere.</p>
+        <summary><span data-i18n="faq.q4">¿Dónde se despliegan tus proyectos?</span><span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+        <p data-i18n="faq.a4">Depende del proyecto: Netlify y GitHub Pages para sitios estáticos, Railway para aplicaciones con backend y base de datos, y servidores locales como Tomcat cuando el cliente lo requiere.</p>
       </details>
       <details>
-        <summary>¿Cómo puedo contactarte?<span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-        <p>Con el formulario de contacto de esta página, por correo o por LinkedIn. Cuéntame qué necesitas construir y lo vemos.</p>
+        <summary><span data-i18n="faq.q5">¿Cómo puedo contactarte?</span><span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
+        <p data-i18n="faq.a5">Con el formulario de contacto de esta página, por correo o por LinkedIn. Cuéntame qué necesitas construir y lo vemos.</p>
       </details>
     </div>
   </div>
@@ -819,9 +847,9 @@
   <div class="wrap">
     <div class="contact-card reveal">
       <div>
-        <span class="pill">Contacto</span>
-        <h2>¿Tienes un proyecto en mente?</h2>
-        <p class="lede">Cuéntame qué necesitas construir. Respondo por correo o por el formulario, lo que te quede más cómodo.</p>
+        <span class="pill" data-i18n="contact.pill">Contacto</span>
+        <h2 data-i18n="contact.title">¿Tienes un proyecto en mente?</h2>
+        <p class="lede" data-i18n="contact.lede">Cuéntame qué necesitas construir. Respondo por correo o por el formulario, lo que te quede más cómodo.</p>
         <div class="channels">
           <a href="mailto:marianbarba1208@gmail.com">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
@@ -839,10 +867,10 @@
       </div>
 
       <form id="contactForm" action="https://formspree.io/f/mgognkzr" method="POST">
-        <div><label for="name">Nombre</label><input type="text" id="name" name="name" required autocomplete="name"></div>
-        <div><label for="email">Correo</label><input type="email" id="email" name="_replyto" required autocomplete="email"></div>
-        <div><label for="message">Mensaje</label><textarea id="message" name="message" required></textarea></div>
-        <button type="submit" class="btn btn-dark">Enviar mensaje</button>
+        <div><label for="name" data-i18n="contact.name">Nombre</label><input type="text" id="name" name="name" required autocomplete="name"></div>
+        <div><label for="email" data-i18n="contact.email">Correo</label><input type="email" id="email" name="_replyto" required autocomplete="email"></div>
+        <div><label for="message" data-i18n="contact.message">Mensaje</label><textarea id="message" name="message" required></textarea></div>
+        <button type="submit" class="btn btn-dark" data-i18n="contact.send">Enviar mensaje</button>
         <p class="form-status" id="formStatus" role="status"></p>
       </form>
     </div>
@@ -853,13 +881,168 @@
 <footer>
   <div class="wrap foot">
     <span>© 2026 Marian Barba.</span>
-    <a href="#top">Volver arriba ↑</a>
+    <a href="#top" data-i18n="footer.top">Volver arriba ↑</a>
   </div>
 </footer>
 
 <script>
 (() => {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Idioma: traducción controlada ES / EN ---------- */
+  const EN = {
+    "doc.title": "Marian Barba — Full-Stack Developer",
+    "doc.description": "Portfolio of Marian Barba, full-stack developer in Panama. React, Angular, PHP/Laravel, .NET and Node: complete web systems and clean code.",
+
+    "nav.home": "Home",
+    "nav.main": "Main",
+    "nav.projects": "Projects",
+    "nav.research": "Research",
+    "nav.skills": "Skills",
+    "nav.experience": "Experience",
+    "nav.faq": "FAQ",
+    "nav.talk": "Let's talk",
+    "nav.openMenu": "Open menu",
+    "lang.group": "Language",
+
+    "hero.eyebrow": "Software Developer / Full-Stack",
+    "hero.title": "Building <em>modern</em> and elegant web experiences",
+    "hero.sub": "I turn complex ideas into clean, interactive, user-centered interfaces.",
+    "hero.ctaProjects": "View projects",
+    "hero.ctaCV": "Download CV",
+    "hero.cvHref": "assets/Marian_Barba_CVE_FullStack.pdf",
+
+    "about.pill": "About me",
+    "about.title": "A focus on clean code, performance and visual detail",
+    "about.lede": "I like to understand the business problem before choosing the technology. I work with React and Angular on the front end, and with PHP/Laravel, .NET, Node.js and Java on the back end. I have taken complete systems from requirements to deployment: database, back end, interface and testing, for both real clients and agile teams.",
+    "about.prev": "Previous",
+    "about.next": "Next",
+    "about.slides": "Slides",
+    "about.goToSlide": "Go to slide",
+    "about.s1.title": "UI components",
+    "about.s1.note": "Typed and reusable",
+    "about.s2.file": "layered-structure.txt",
+    "about.s2.code": `<span class="c">// Each layer with a single responsibility</span>
+<span class="f">model/</span>        <span class="c">→ data (JavaBeans / types)</span>
+<span class="f">dao/</span>           <span class="c">→ database access</span>
+<span class="f">controller/</span>   <span class="c">→ handles the HTTP request</span>
+<span class="f">views/</span>        <span class="c">→ what the user sees</span>
+
+<span class="c">// The controller never writes SQL:</span>
+<span class="k">const</span> cliente = <span class="k">await</span> clienteDAO.<span class="f">buscarPorCorreo</span>(correo);`,
+    "about.s2.title": "Clean architecture",
+    "about.s2.note": "Separation by layers",
+    "about.s3.title": "Responsive design",
+    "about.s3.note": "From mobile to desktop",
+
+    "eco.pill": "Ecosystem &amp; tools",
+    "eco.title": "Integration &amp; environments",
+    "eco.p": "From the editor to the production server: the tools I use to build, test and deploy my projects.",
+
+    "stack.pill": "My stack",
+    "stack.title": "Technologies &amp; frameworks",
+    "stack.p": "A broad stack, chosen by the problem: React or Angular on the front end; Laravel, .NET, Node or Java on the back end; and relational databases underneath.",
+    "stack.mini1": "React and Angular: typed, accessible and responsive interfaces.",
+    "stack.mini2.label": "Backend &amp; data",
+    "stack.mini2": "PHP/Laravel, .NET, Node and Java: APIs, authentication and relational modeling.",
+    "stack.front.title": "Interfaces that feel right",
+    "stack.front.li1": "React and Angular with TypeScript; React in Helios and Villas Doña Olga",
+    "stack.front.li2": "Tailwind CSS and shadcn/ui for consistent design systems",
+    "stack.test.li1": "Module-by-module testing with ISTQB criteria (Helios)",
+    "stack.test.li2": "Vitest + React Testing Library and SonarQube analysis",
+    "stack.devops.cat": "DevOps &amp; infrastructure",
+    "stack.devops.li1": "Deployments on Railway and Netlify, team CI/CD",
+    "stack.devops.li2": "Supabase: PostgreSQL, Auth and Realtime",
+    "stack.back.cat": "Backend &amp; databases",
+    "stack.back.title": "Solid logic, well-modeled data",
+    "stack.back.li1": "PHP with Laravel and C# / .NET for APIs and web applications",
+    "stack.back.li2": "Java (Servlets/JSP) + MySQL in La Casa de Mandi",
+    "stack.back.li3": "Node.js + Express + Drizzle ORM in Evac Shipping",
+    "stack.back.li4": "Data validation with Zod and protected routes",
+    "stack.tools.cat": "Tools &amp; workflow",
+    "stack.tools.li1": "From the Figma prototype to the endpoint tested in Postman, working on Linux",
+    "stack.method.cat": "Methodologies",
+    "stack.method.li1": "Scrum Master at Helios: sprints, dailies and deliveries with quality metrics",
+
+    "projects.pill": "Portfolio",
+    "projects.title": "Featured work",
+    "projects.p": "Five systems, five different problems. Each one with its stack, its client and its real delivery status.",
+
+    "meta.role": "Role",
+    "meta.team": "Team",
+    "meta.year": "Year",
+    "meta.client": "Client",
+    "meta.deploy": "Deployment",
+    "meta.type": "Type",
+    "meta.soleDev": "Sole developer",
+
+    "p1.status": "Live",
+    "p1.kicker": "Medical appointment system for a network of clinics",
+    "p1.team": "5 people",
+    "p1.desc": "A platform that unifies appointment booking, cancellation and rescheduling, cross-location syncing and reminders. React + TypeScript on Supabase (PostgreSQL, Auth and Realtime), module testing with Vitest and continuous deployment on Railway.",
+    "p2.status": "Delivered",
+    "p2.kicker": "Custom-order platform for a pastry shop",
+    "p2.client": "Artisan pastry shop",
+    "p2.deploy": "Local Tomcat",
+    "p2.desc": "It replaces the manual WhatsApp, Excel and Yappy workflow: catalog, orders with custom design, verified deposits and payments, production and delivery, with an admin panel and daily capacity control.",
+    "p3.status": "In production",
+    "p3.kicker": "Residential lot sales",
+    "p3.client": "Family project",
+    "p3.desc": "A site to check the availability of 50+ lots, learn about the direct financing plan, follow the project progress and contact the salesperson by WhatsApp or email.",
+    "p4.status": "Completed",
+    "p4.kicker": "Shipping management from the U.S. to Panama",
+    "p4.type": "Full-stack platform",
+    "p4.desc": "User registration, package tracking by weight and status, and an admin panel with shipment CRUD and support messages. Administrative access with two-step verification and a REST API validated with Zod.",
+    "p5.status": "In development",
+    "p5.kicker": "Schedule combinations with no clashes",
+    "p5.type": "Web tool",
+    "p5.deploy": "GitHub Pages · no back end",
+    "p5.desc": "It reads the official schedule (PDF or image, with OCR tolerant to errors), lets you review what was detected and generates all the section combinations without clashes based on the courses and preferred shift. Everything is processed in the browser: no server, no database.",
+
+    "link.code": "Code",
+    "link.demo": "Live demo",
+
+    "exp.pill": "Experience",
+    "exp.title": "Where I have put my skills into practice",
+    "exp.p": "Projects with real clients, teamwork with agile processes and products of my own from start to finish.",
+    "exp.whenClients": "Client projects",
+    "exp.whenOwn": "Own products",
+    "exp.role": "Full-stack developer",
+    "exp.li1.p": "Team of 5. Sprints, dailies, CI/CD and Railway deployment of a medical appointment system, with module testing.",
+    "exp.li2.p": "La Casa de Mandi (pastry shop) and Villas Doña Olga (lot sales): from the proposal and design to the back end, the interface and deployment.",
+    "exp.li3.p": "Evac Shipping and HorariosWeb: complete products built from start to finish, from data modeling to deployment.",
+
+    "faq.title": "Frequently asked questions",
+    "faq.p": "Don't see your question? Write to me and I will answer it.",
+    "faq.cta": "Get in touch",
+    "faq.q1": "Which technologies do you work with?",
+    "faq.a1": "On the front end, React and Angular with TypeScript and Tailwind CSS. On the back end, PHP with Laravel, C# / .NET, Node.js with Express and Java with Servlets/JSP. For data, PostgreSQL (via Supabase), MySQL, SQLite and Oracle.",
+    "faq.q2": "Do you do only frontend or backend too?",
+    "faq.a2": "Both. I cover the full cycle: requirements gathering, database design, back end, interface, testing and deployment.",
+    "faq.q3": "Have you worked with real clients?",
+    "faq.a3": "Yes. La Casa de Mandi digitized the orders of an artisan pastry shop, and Villas Doña Olga is the sales site of a residential lot project.",
+    "faq.q4": "Where are your projects deployed?",
+    "faq.a4": "It depends on the project: Netlify and GitHub Pages for static sites, Railway for applications with a backend and database, and local servers like Tomcat when the client requires it.",
+    "faq.q5": "How can I contact you?",
+    "faq.a5": "With the contact form on this page, by email or on LinkedIn. Tell me what you need to build and we will discuss it.",
+
+    "contact.pill": "Contact",
+    "contact.title": "Have a project in mind?",
+    "contact.lede": "Tell me what you need to build. I reply by email or through the form, whichever is more comfortable for you.",
+    "contact.name": "Name",
+    "contact.email": "Email",
+    "contact.message": "Message",
+    "contact.send": "Send message",
+
+    "form.sending": "Sending…",
+    "form.ok": "Message sent! I will get back to you soon.",
+    "form.err": "I couldn't send it. Please write to me directly by email.",
+
+    "footer.top": "Back to top ↑"
+  };
+  let LANG = 'es';
+  const t = (key, es) => (LANG === 'en' && EN[key] != null) ? EN[key] : es;
+
 
   /* ---------- Nav ---------- */
   const nav = document.getElementById('nav');
@@ -908,7 +1091,7 @@
   slides.forEach((_, i) => {
     const d = document.createElement('button');
     d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', 'Ir a la diapositiva ' + (i + 1));
+    d.setAttribute('aria-label', t('about.goToSlide', 'Ir a la diapositiva') + ' ' + (i + 1));
     d.addEventListener('click', () => { go(i); restart(); });
     dotsWrap.appendChild(d);
   });
@@ -1034,15 +1217,48 @@
   const status = document.getElementById('formStatus');
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    status.textContent = 'Enviando…'; status.className = 'form-status';
+    status.textContent = t('form.sending', 'Enviando…'); status.className = 'form-status';
     try {
       const res = await fetch(form.action, { method:'POST', body:new FormData(form), headers:{ 'Accept':'application/json' } });
-      if (res.ok) { status.textContent = '¡Mensaje enviado! Te responderé pronto.'; status.className = 'form-status ok'; form.reset(); }
+      if (res.ok) { status.textContent = t('form.ok', '¡Mensaje enviado! Te responderé pronto.'); status.className = 'form-status ok'; form.reset(); }
       else { throw new Error('bad'); }
     } catch (err) {
-      status.textContent = 'No se pudo enviar. Escríbeme directo por correo, por favor.'; status.className = 'form-status err';
+      status.textContent = t('form.err', 'No se pudo enviar. Escríbeme directo por correo, por favor.'); status.className = 'form-status err';
     }
   });
+
+  /* ---------- Aplicar el idioma (ES por defecto, EN si está guardado) ---------- */
+  const i18nText = [...document.querySelectorAll('[data-i18n]')];
+  const i18nAttrs = [];
+  [['aria', 'aria-label'], ['title', 'title'], ['alt', 'alt'], ['href', 'href']].forEach(([suffix, attr]) => {
+    document.querySelectorAll('[data-i18n-' + suffix + ']').forEach(el => {
+      i18nAttrs.push({ el, attr, key: el.getAttribute('data-i18n-' + suffix), es: el.getAttribute(attr) });
+    });
+  });
+  const esHTML = new Map(i18nText.map(el => [el, el.innerHTML]));
+  const metaDesc = document.querySelector('meta[name="description"]');
+  const esMeta = { title: document.title, description: metaDesc ? metaDesc.getAttribute('content') : '' };
+  const langOpts = [...document.querySelectorAll('.lang-opt')];
+
+  function applyLang(l) {
+    LANG = l;
+    document.documentElement.lang = l;
+    i18nText.forEach(el => { const key = el.dataset.i18n; el.innerHTML = (l === 'en' && EN[key] != null) ? EN[key] : esHTML.get(el); });
+    i18nAttrs.forEach(({ el, attr, key, es }) => el.setAttribute(attr, (l === 'en' && EN[key] != null) ? EN[key] : es));
+    document.title = l === 'en' ? EN['doc.title'] : esMeta.title;
+    if (metaDesc) metaDesc.setAttribute('content', l === 'en' ? EN['doc.description'] : esMeta.description);
+    langOpts.forEach(b => { const on = b.dataset.lang === l; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on)); });
+    dots.forEach((d, i) => d.setAttribute('aria-label', t('about.goToSlide', 'Ir a la diapositiva') + ' ' + (i + 1)));
+    document.documentElement.classList.remove('i18n-pre');
+    document.dispatchEvent(new CustomEvent('mb:lang', { detail: { lang: l } }));
+    try { localStorage.setItem('mb-lang', l); } catch (e) {}
+  }
+
+  langOpts.forEach(btn => btn.addEventListener('click', () => { if (btn.dataset.lang !== LANG) applyLang(btn.dataset.lang); }));
+
+  let savedLang = 'es';
+  try { savedLang = localStorage.getItem('mb-lang') === 'en' ? 'en' : 'es'; } catch (e) {}
+  if (savedLang === 'en') applyLang('en'); else document.documentElement.classList.remove('i18n-pre');
 })();
 </script>
 </body>
