@@ -16,7 +16,13 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const coarse = matchMedia('(hover: none), (pointer: coarse)');
   const note = box.querySelector('.cursor-note');
-  if (note && coarse.matches) note.textContent = 'Toca la estructura';
+  // "Toca la estructura" / "Touch the structure" según el idioma del selector ES/EN
+  const updateNote = (lang) => {
+    if (!note || !coarse.matches) return;
+    note.textContent = lang === 'en' ? 'Touch the structure' : 'Toca la estructura';
+  };
+  updateNote(document.documentElement.lang);
+  document.addEventListener('mb:lang', (e) => updateNote(e.detail && e.detail.lang));
 
   const options = () => ({
     interactive: true,
